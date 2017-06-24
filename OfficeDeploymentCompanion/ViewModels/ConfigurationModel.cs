@@ -45,7 +45,8 @@ namespace OfficeDeploymentCompanion.ViewModels
         private bool _enableUpdates, _autoActivate, _forceAppShutdown, _pinIconsToTaskBar;
         private bool _sharedComputerLicensing, _silentMode, _acceptEula;
         private Channel _selectedChannel;
-        private CpuArchitecture _selectedArchitecture;
+        private OfficeClientEdition _selectedArchitecture;
+        private DisplayLevel _displayLevel;
 
         public List<Language> AvailableLanguages
         {
@@ -137,7 +138,7 @@ namespace OfficeDeploymentCompanion.ViewModels
             set { Set(nameof(AcceptEula), ref _acceptEula, value); }
         }
 
-        public CpuArchitecture SelectedArchitecture
+        public OfficeClientEdition SelectedArchitecture
         {
             get { return _selectedArchitecture; }
             set { Set(nameof(SelectedArchitecture), ref _selectedArchitecture, value); }
@@ -149,11 +150,17 @@ namespace OfficeDeploymentCompanion.ViewModels
             set { Set(nameof(SelectedChannel), ref _selectedChannel, value); }
         }
 
+        public DisplayLevel DisplayLevel
+        {
+            get { return _displayLevel; }
+            set { Set(nameof(DisplayLevel), ref _displayLevel, value); }
+        }
+
         public class Language
         {
             public string Name { get; set; }
 
-            public string CultureName { get; set; }
+            public string Id { get; set; }
         }
 
         public class Product

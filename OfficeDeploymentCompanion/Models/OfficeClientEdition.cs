@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OfficeDeploymentCompanion.Models
 {
-    public enum CpuArchitecture
+    public enum OfficeClientEdition
     {
         //ARM,
         //ARM64,

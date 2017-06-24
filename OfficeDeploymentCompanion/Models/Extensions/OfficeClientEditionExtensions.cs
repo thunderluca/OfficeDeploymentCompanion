@@ -6,20 +6,20 @@ using System.Threading.Tasks;
 
 namespace OfficeDeploymentCompanion.Models
 {
-    public static class CpuArchitectureExtensions
+    public static class OfficeClientEditionExtensions
     {
-        public static int GetOSArchitecture(this CpuArchitecture cpuArchitecture)
+        public static int GetOSArchitecture(this OfficeClientEdition edition)
         {
-            switch (cpuArchitecture)
+            switch (edition)
             {
                 //case CpuArchitecture.ARM:
-                case CpuArchitecture.X86:
+                case OfficeClientEdition.X86:
                     return 32;
                 //case CpuArchitecture.ARM64:
-                case CpuArchitecture.X64:
+                case OfficeClientEdition.X64:
                     return 64;
                 default:
-                    throw new NotSupportedException($"Not supported CPU Architecture: {cpuArchitecture}");
+                    throw new NotSupportedException($"Not supported OfficeClientEdition: {edition}");
             }
         }
     }

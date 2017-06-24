@@ -48,7 +48,7 @@ namespace OfficeDeploymentCompanion.WorkerServices
                     xmlWriter.WriteAttributeString("OfficeClientEdition", OSBitArchitecture.ToString());
                     xmlWriter.WriteAttributeString("Channel", configuration.SelectedChannel.ToString("G"));
                     xmlWriter.WriteOffice365ProPlusRetailProductElement(
-                        languages: configuration.AddedLanguages.Select(l => l.CultureName),
+                        languages: configuration.AddedLanguages.Select(l => l.Id),
                         excludedAppIds: configuration.ExcludedProducts.Select(p => p.Id));
                     xmlWriter.WriteEndElement();
                     xmlWriter.WriteEndElement();
@@ -72,30 +72,125 @@ namespace OfficeDeploymentCompanion.WorkerServices
                 ExcludedProducts = new ObservableCollection<ConfigurationModel.Product>(),
                 EnableUpdates = true,
                 SelectedChannel = Channel.Current,
-                SelectedArchitecture = CpuArchitecture.X86
+                SelectedArchitecture = OfficeClientEdition.X86
             };
         }
 
         public ConfigurationModel LoadConfiguration(string filePath)
         {
-            using (var xmlReader = XmlReader.Create(filePath))
+            var configurationModel = InitializeConfiguration();
+
+            try
             {
-                while (xmlReader.Read())
+                using (var xmlReader = XmlReader.Create(filePath))
                 {
-                    switch (xmlReader.NodeType)
+                    while (xmlReader.Read())
                     {
-                        case XmlNodeType.Element:
-                            {
+                        if (xmlReader.NodeType != XmlNodeType.Element) continue;
+
+                        switch (xmlReader.Name)
+                        {
+                            case "Configuration":
+                            case "Product":
                                 break;
-                            }
-                        case XmlNodeType.Attribute:
-                            {
-                                break;
-                            }
+                            case "Add":
+                                {
+                                    var officeClientEdition = xmlReader.GetAttribute("OfficeClientEdition");
+                                    if (!string.IsNullOrWhiteSpace(officeClientEdition))
+                                    {
+                                        switch (Convert.ToInt32(officeClientEdition))
+                                        {
+                                            case 32:
+                                                configurationModel.SelectedArchitecture = OfficeClientEdition.X86;
+                                                break;
+                                            case 64:
+                                                configurationModel.SelectedArchitecture = OfficeClientEdition.X64;
+                                                break;
+                                            default:
+                                                throw new NotSupportedException($"Invalid OfficeClientEdition: {officeClientEdition}");
+                                        }
+                                    }
+
+                                    var channel = xmlReader.GetAttribute("Channel");
+                                    if (!string.IsNullOrWhiteSpace(channel))
+                                        configurationModel.SelectedChannel = (Channel)Enum.Parse(typeof(Channel), channel);
+                                    break;
+                                }
+                            case "Language":
+                                {
+                                    var id = xmlReader.GetAttribute("ID");
+                                    configurationModel.TryAddLanguageIfValid(id);
+                                    break;
+                                }
+                            case "ExcludeApp":
+                                {
+                                    var id = xmlReader.GetAttribute("ID");
+                                    configurationModel.TryAddExcludedProductIfValid(id);
+                                    break;
+                                }
+                            case "Updates":
+                                {
+                                    var enableUpdates = xmlReader.GetAttribute("Enabled");
+                                    configurationModel.EnableUpdates = GetValueFromBoolean(enableUpdates);
+                                    break;
+                                }
+                            case "Display":
+                                {
+                                    var displayLevel = xmlReader.GetAttribute("Level");
+                                    if (!string.IsNullOrWhiteSpace(displayLevel))
+                                        configurationModel.DisplayLevel = (DisplayLevel)Enum.Parse(typeof(DisplayLevel), displayLevel);
+
+                                    var acceptEula = xmlReader.GetAttribute("AcceptEULA");
+                                    configurationModel.AcceptEula = GetValueFromBoolean(acceptEula);
+                                    break;
+                                }
+                            case "Property":
+                                {
+                                    var name = xmlReader.GetAttribute("Name");
+                                    switch (name.ToUpper())
+                                    {
+                                        case "AUTOACTIVATE":
+                                            {
+                                                var value = xmlReader.GetAttribute("Value");
+                                                configurationModel.AutoActivate = GetValueFromBit(value);
+                                                break;
+                                            }
+                                        case "FORCEAPPSHUTDOWN":
+                                            {
+                                                var value = xmlReader.GetAttribute("Value");
+                                                configurationModel.ForceAppShutdown = GetValueFromBoolean(value);
+                                                break;
+                                            }
+                                        case "PinIconsToTaskBar":
+                                            {
+                                                var value = xmlReader.GetAttribute("Value");
+                                                configurationModel.PinIconsToTaskBar = GetValueFromBoolean(value);
+                                                break;
+                                            }
+                                        case "SharedComputerLicensing":
+                                            {
+                                                var value = xmlReader.GetAttribute("Value");
+                                                configurationModel.SharedComputerLicensing = GetValueFromBit(value);
+                                                break;
+                                            }
+                                    }
+                                    break;
+                                }
+                        }
                     }
+
+                    return configurationModel;
                 }
             }
+            catch (Exception exception)
+            {
+                throw exception;
+            }
         }
+
+        private static bool GetValueFromBit(string value) => !string.IsNullOrWhiteSpace(value) ? value == "1" : false;
+
+        private static bool GetValueFromBoolean(string value) => !string.IsNullOrWhiteSpace(value) ? Boolean.Parse(value) : false;
 
         public List<ConfigurationModel.Language> GetAvailableLanguages()
         {
@@ -104,7 +199,7 @@ namespace OfficeDeploymentCompanion.WorkerServices
                 .Select(kvp => new ConfigurationModel.Language
                 {
                     Name = kvp.Key,
-                    CultureName = kvp.Value
+                    Id = kvp.Value
                 })
                 .ToList();
         }
