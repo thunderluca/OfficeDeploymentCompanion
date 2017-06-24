@@ -12,10 +12,10 @@ namespace OfficeDeploymentCompanion.Models
         {
             switch (cpuArchitecture)
             {
-                case CpuArchitecture.ARM:
+                //case CpuArchitecture.ARM:
                 case CpuArchitecture.X86:
                     return 32;
-                case CpuArchitecture.ARM64:
+                //case CpuArchitecture.ARM64:
                 case CpuArchitecture.X64:
                     return 64;
                 default:

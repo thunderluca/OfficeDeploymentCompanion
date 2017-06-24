@@ -1,8 +1,8 @@
-﻿using System;
+﻿using OfficeDeploymentCompanion.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace System.Xml
@@ -11,8 +11,8 @@ namespace System.Xml
     {
         public static void WriteOffice365ProPlusRetailProductElement(
             this XmlWriter xmlWriter, 
-            IList<string> languages = null, 
-            IList<string> excludedApps = null)
+            IEnumerable<string> languages = null, 
+            IEnumerable<string> excludedAppIds = null)
         {
             if (xmlWriter == null)
                 throw new ArgumentNullException(nameof(xmlWriter));
@@ -20,7 +20,7 @@ namespace System.Xml
             xmlWriter.WriteStartElement("Product");
             xmlWriter.WriteAttributeString("ID", "O365ProPlusRetail");
 
-            if (languages == null || languages.Count == 0)
+            if (languages == null || languages.Count() == 0)
             {
                 xmlWriter.WriteDefaultLanguageElement();
             }
@@ -30,9 +30,9 @@ namespace System.Xml
                     xmlWriter.WriteLanguageElement(language);
             }
 
-            if (excludedApps != null && excludedApps.Count > 0)
+            if (excludedAppIds != null && excludedAppIds.Count() > 0)
             {
-                foreach (var excludedApp in excludedApps)
+                foreach (var excludedApp in excludedAppIds)
                     xmlWriter.WriteExcludeAppElement(excludedApp);
             }
 
@@ -49,22 +49,28 @@ namespace System.Xml
             if (string.IsNullOrWhiteSpace(languageCultureName))
                 throw new ArgumentNullException(nameof(languageCultureName));
 
+            if (Languages.AvailableDictionary.All(kvp => kvp.Value != languageCultureName))
+                throw new NotSupportedException($"Unsupported language: {languageCultureName}");
+
             xmlWriter.WriteStartElement("Language");
             xmlWriter.WriteAttributeString("ID", languageCultureName);
             xmlWriter.WriteFullEndElement();
             xmlWriter.WriteEndElement();
         }
 
-        private static void WriteExcludeAppElement(this XmlWriter xmlWriter, string excludedAppName)
+        private static void WriteExcludeAppElement(this XmlWriter xmlWriter, string excludedAppId)
         {
             if (xmlWriter == null)
                 throw new ArgumentNullException(nameof(xmlWriter));
 
-            if (string.IsNullOrWhiteSpace(excludedAppName))
-                throw new ArgumentNullException(nameof(excludedAppName));
+            if (string.IsNullOrWhiteSpace(excludedAppId))
+                throw new ArgumentNullException(nameof(excludedAppId));
+
+            if (Products.AvailableDictionary.All(kvp => kvp.Value != excludedAppId))
+                throw new NotSupportedException($"Unsupported product: {excludedAppId}");
 
             xmlWriter.WriteStartElement("ExcludeApp");
-            xmlWriter.WriteAttributeString("ID", excludedAppName);
+            xmlWriter.WriteAttributeString("ID", excludedAppId);
             xmlWriter.WriteFullEndElement();
             xmlWriter.WriteEndElement();
         }

@@ -69,6 +69,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Extensions\LinqExtensions.cs" />
     <Compile Include="Extensions\XmlWriterExtensions.cs" />
     <Compile Include="Models\CpuArchitecture.cs" />
     <Compile Include="Models\Extensions\CpuArchitectureExtensions.cs" />
@@ -76,6 +77,7 @@
     <Compile Include="Models\Languages.cs" />
     <Compile Include="Models\O365ProPlusSettings.cs" />
     <Compile Include="Models\Products.cs" />
+    <Compile Include="ViewModels\ConfigurationModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
     <Compile Include="WorkerServices\MainViewModelWorkerServices.cs" />

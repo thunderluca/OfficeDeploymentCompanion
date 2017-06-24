@@ -8,8 +8,8 @@ namespace OfficeDeploymentCompanion.Models
 {
     public enum CpuArchitecture
     {
-        ARM,
-        ARM64,
+        //ARM,
+        //ARM64,
         X86,
         X64
     }
