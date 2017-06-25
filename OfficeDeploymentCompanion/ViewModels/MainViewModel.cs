@@ -19,6 +19,9 @@ namespace OfficeDeploymentCompanion.ViewModels
                 throw new ArgumentNullException(nameof(workerServices));
 
             this.WorkerServices = workerServices;
+
+            if (this.CurrentConfiguration == null)
+                this.CurrentConfiguration = this.WorkerServices.InitializeConfiguration();
         }
 
         private ConfigurationModel _currentConfiguration;

@@ -218,7 +218,7 @@ namespace OfficeDeploymentCompanion.WorkerServices
 
         public List<ConfigurationModel.Language> GetAvailableLanguages()
         {
-            return Languages.AvailableDictionary
+            var languages = Languages.AvailableDictionary
                 .OrderBy(l => l.Name)
                 .Select(l => new ConfigurationModel.Language
                 {
@@ -226,11 +226,19 @@ namespace OfficeDeploymentCompanion.WorkerServices
                     Id = l.Id
                 })
                 .ToList();
+
+            languages.Insert(index: 0, item: new ConfigurationModel.Language
+            {
+                Name = "Select a language",
+                Id = string.Empty
+            });
+
+            return languages;
         }
 
         public List<ConfigurationModel.Product> GetAvailableProducts()
         {
-            return Products.AvailableDictionary
+            var products = Products.AvailableDictionary
                 .OrderBy(p => p.Name)
                 .Select(p => new ConfigurationModel.Product
                 {
@@ -238,6 +246,14 @@ namespace OfficeDeploymentCompanion.WorkerServices
                     Id = p.Id
                 })
                 .ToList();
+
+            products.Insert(index: 0, item: new ConfigurationModel.Product
+            {
+                Name = "Select a product",
+                Id = string.Empty
+            });
+
+            return products;
         }
 
         private static XmlWriterSettings GetDefaultXmlWriterSettings() => new XmlWriterSettings

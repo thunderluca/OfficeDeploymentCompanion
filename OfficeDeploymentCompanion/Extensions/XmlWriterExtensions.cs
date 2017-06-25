@@ -49,12 +49,11 @@ namespace System.Xml
             if (string.IsNullOrWhiteSpace(languageCultureName))
                 throw new ArgumentNullException(nameof(languageCultureName));
 
-            if (Languages.AvailableDictionary.All(l => l.Id != languageCultureName))
+            if (languageCultureName != "MatchOS" && Languages.AvailableDictionary.All(l => l.Id != languageCultureName))
                 throw new NotSupportedException($"Unsupported language: {languageCultureName}");
 
             xmlWriter.WriteStartElement("Language");
             xmlWriter.WriteAttributeString("ID", languageCultureName);
-            xmlWriter.WriteFullEndElement();
             xmlWriter.WriteEndElement();
         }
 
@@ -71,7 +70,6 @@ namespace System.Xml
 
             xmlWriter.WriteStartElement("ExcludeApp");
             xmlWriter.WriteAttributeString("ID", excludedAppId);
-            xmlWriter.WriteFullEndElement();
             xmlWriter.WriteEndElement();
         }
     }

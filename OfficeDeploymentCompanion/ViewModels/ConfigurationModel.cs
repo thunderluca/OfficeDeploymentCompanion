@@ -36,10 +36,10 @@ namespace OfficeDeploymentCompanion.ViewModels
         //        : new ObservableCollection<Product>();
         //}
 
-        private Language _selectedAvailableLanguage, _selectedAddedLanguage;
+        private Language _selectedAvailableLanguage;
         private List<Language> _availableLanguages;
         private ObservableCollection<Language> _addedLanguages;
-        private Product _selectedAvailableProduct, _selectedExcludedProduct;
+        private Product _selectedAvailableProduct;
         private List<Product> _availableProducts;
         private ObservableCollection<Product> _excludedProducts;
         private bool _enableUpdates, _autoActivate, _forceAppShutdown, _pinIconsToTaskBar;
@@ -57,19 +57,25 @@ namespace OfficeDeploymentCompanion.ViewModels
         public Language SelectedAvailableLanguage
         {
             get { return _selectedAvailableLanguage; }
-            set { Set(nameof(SelectedAvailableLanguage), ref _selectedAvailableLanguage, value); }
+            set
+            {
+                if (!Set(nameof(SelectedAvailableLanguage), ref _selectedAvailableLanguage, value)) return;
+
+                if (_selectedAvailableLanguage == null) return;
+
+                if (string.IsNullOrWhiteSpace(_selectedAvailableLanguage.Id) || 
+                    this.AddedLanguages.Any(l => l.Id == _selectedAvailableLanguage.Id)) return;
+
+                this.AddedLanguages.Add(_selectedAvailableLanguage);
+
+                this.SelectedAvailableLanguage = null;
+            }
         }
 
         public ObservableCollection<Language> AddedLanguages
         {
             get { return _addedLanguages; }
             set { Set(nameof(AddedLanguages), ref _addedLanguages, value); }
-        }
-
-        public Language SelectedAddedLanguage
-        {
-            get { return _selectedAddedLanguage; }
-            set { Set(nameof(SelectedAddedLanguage), ref _selectedAddedLanguage, value); }
         }
 
         public List<Product> AvailableProducts
@@ -88,12 +94,6 @@ namespace OfficeDeploymentCompanion.ViewModels
         {
             get { return _excludedProducts; }
             set { Set(nameof(ExcludedProducts), ref _excludedProducts, value); }
-        }
-
-        public Product SelectedExcludedProduct
-        {
-            get { return _selectedExcludedProduct; }
-            set { Set(nameof(SelectedExcludedProduct), ref _selectedExcludedProduct, value); }
         }
 
         public bool EnableUpdates

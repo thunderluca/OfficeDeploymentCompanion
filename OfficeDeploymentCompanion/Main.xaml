@@ -16,6 +16,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         
@@ -24,19 +25,116 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Row="1" Grid.ColumnSpan="2">
+        <Grid Grid.Row="0" 
+              Grid.Column="0">
+        </Grid>
+
+        <StackPanel Grid.Row="1"
+                    Grid.Column="0" 
+                    Margin="12">
+            <CheckBox Content="Enable updates" 
+                      IsChecked="{Binding CurrentConfiguration.EnableUpdates, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      Foreground="White"
+                      FontSize="16" />
+            <CheckBox Content="Auto activate Office" 
+                      IsChecked="{Binding CurrentConfiguration.AutoActivate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      Foreground="White"
+                      FontSize="16" 
+                      Margin="0,8" />
+            <CheckBox Content="Force apps shutdown to install" 
+                      IsChecked="{Binding CurrentConfiguration.ForceAppShutdown, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      Foreground="White"
+                      FontSize="16" />
+            <CheckBox Content="Pin icons to taskbar (if supported)" 
+                      IsChecked="{Binding CurrentConfiguration.PinIconsToTaskBar, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      Foreground="White"
+                      FontSize="16" 
+                      Margin="0,8" />
+            <CheckBox Content="Silent mode (no UI)" 
+                      IsChecked="{Binding CurrentConfiguration.SilentMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      Foreground="White"
+                      FontSize="16" />
+            <CheckBox Content="Accept EULA" 
+                      IsChecked="{Binding CurrentConfiguration.AcceptEula, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      Foreground="White"
+                      FontSize="16" 
+                      Margin="0,8" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="0" 
+                    Grid.Column="1"
+                    Margin="12">
+            <ComboBox ItemsSource="{Binding CurrentConfiguration.AvailableLanguages}" 
+                      SelectedItem="{Binding CurrentConfiguration.SelectedAvailableLanguage, Mode=TwoWay}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}" 
+                                   Foreground="Black"
+                                   HorizontalAlignment="Stretch"
+                                   VerticalAlignment="Stretch"
+                                   TextAlignment="Left" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+            <ListBox ItemsSource="{Binding CurrentConfiguration.AddedLanguages, Mode=OneWay}"
+                     Margin="0,12,0,0"
+                     SelectionMode="Single"
+                     Background="Transparent">
+                <ListBox.Resources>
+                    <Style TargetType="{x:Type ListBoxItem}">
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="Margin" Value="0" />
+                    </Style>
+                </ListBox.Resources>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0"
+                                       FontSize="14"
+                                       Text="{Binding Name}" 
+                                       Foreground="White"
+                                       VerticalAlignment="Stretch" />
+                            <Button Grid.Column="1" 
+                                    Content="x"
+                                    FontWeight="SemiBold"
+                                    Tag="{Binding Id}"
+                                    Foreground="Red" 
+                                    Background="Transparent"
+                                    Click="OnAddedLanguageButtonClick" />
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </StackPanel>
+
+        <Grid Grid.Row="2" 
+              Grid.ColumnSpan="2">
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Center">
                 <Button Content="Load"
                         FontSize="16"
                         FontWeight="SemiBold"
+                        Foreground="White"
+                        BorderBrush="DarkGray"
+                        BorderThickness="2.5"
+                        Background="{StaticResource DarkGrayVS}"
                         Padding="20,10"
                         Margin="16"
                         Command="{Binding LoadCommand}" />
                 <Button Content="Save"
                         FontSize="16"
                         FontWeight="SemiBold"
+                        Foreground="White"
+                        BorderBrush="DarkGray"
+                        BorderThickness="2.5"
+                        Background="{StaticResource DarkGrayVS}"
                         Padding="20,10"
                         Margin="0,16,16,16" 
                         Command="{Binding SaveCommand}" />
@@ -48,11 +146,19 @@
                 <Button Content="Download"
                         FontSize="16"
                         FontWeight="SemiBold"
+                        Foreground="White"
+                        BorderBrush="DarkGray"
+                        BorderThickness="2.5"
+                        Background="{StaticResource DarkGrayVS}"
                         Padding="20,10"
                         Margin="16" />
                 <Button Content="Install"
                         FontSize="16"
                         FontWeight="SemiBold"
+                        Foreground="White"
+                        BorderBrush="DarkGray"
+                        BorderThickness="2.5"
+                        Background="{StaticResource DarkGrayVS}"
                         Padding="20,10"
                         Margin="0,16,16,16" />
             </StackPanel>
