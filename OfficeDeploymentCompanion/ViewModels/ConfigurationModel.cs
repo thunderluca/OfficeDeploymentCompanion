@@ -87,7 +87,19 @@ namespace OfficeDeploymentCompanion.ViewModels
         public Product SelectedAvailableProduct
         {
             get { return _selectedAvailableProduct; }
-            set { Set(nameof(SelectedAvailableProduct), ref _selectedAvailableProduct, value); }
+            set
+            {
+                if (!Set(nameof(SelectedAvailableProduct), ref _selectedAvailableProduct, value)) return;
+
+                if (_selectedAvailableProduct == null) return;
+
+                if (string.IsNullOrWhiteSpace(_selectedAvailableProduct.Id) ||
+                    this.ExcludedProducts.Any(l => l.Id == _selectedAvailableProduct.Id)) return;
+
+                this.ExcludedProducts.Add(_selectedAvailableProduct);
+
+                this.SelectedAvailableProduct = null;
+            }
         }
 
         public ObservableCollection<Product> ExcludedProducts

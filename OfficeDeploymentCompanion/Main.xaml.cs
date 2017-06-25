@@ -29,5 +29,17 @@ namespace OfficeDeploymentCompanion
             if (languageToRemove != null)
                 ViewModel.CurrentConfiguration.AddedLanguages.Remove(languageToRemove);
         }
+
+        private void OnExcludedProductButtonClick(object sender, RoutedEventArgs e)
+        {
+            if (!(sender is Button)) return;
+
+            var id = (sender as Button).Tag.ToString();
+            if (string.IsNullOrWhiteSpace(id)) return;
+
+            var productToReInclude = ViewModel.CurrentConfiguration.ExcludedProducts.SingleOrDefault(l => l.Id == id);
+            if (productToReInclude != null)
+                ViewModel.CurrentConfiguration.ExcludedProducts.Remove(productToReInclude);
+        }
     }
 }

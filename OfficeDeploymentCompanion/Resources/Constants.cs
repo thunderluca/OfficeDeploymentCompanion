@@ -10,5 +10,6 @@ namespace OfficeDeploymentCompanion.Resources
     {
         public const string DefaultConfigurationFileName = "configuration.xml";
         public const string DefaultFileDialogExtension = ".xml";
+        public const string DefaultLanguageMatchOSId = "MatchOS";
     }
 }

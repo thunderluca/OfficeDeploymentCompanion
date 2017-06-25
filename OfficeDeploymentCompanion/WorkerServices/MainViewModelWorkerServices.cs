@@ -229,7 +229,7 @@ namespace OfficeDeploymentCompanion.WorkerServices
 
             languages.Insert(index: 0, item: new ConfigurationModel.Language
             {
-                Name = "Select a language",
+                Name = "Select a language to include in Office installation",
                 Id = string.Empty
             });
 
@@ -249,7 +249,7 @@ namespace OfficeDeploymentCompanion.WorkerServices
 
             products.Insert(index: 0, item: new ConfigurationModel.Product
             {
-                Name = "Select a product",
+                Name = "Select a product to exclude from Office installation",
                 Id = string.Empty
             });
 

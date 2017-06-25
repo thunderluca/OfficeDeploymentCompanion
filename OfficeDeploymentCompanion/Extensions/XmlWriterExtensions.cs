@@ -1,4 +1,5 @@
 ﻿using OfficeDeploymentCompanion.Models;
+using OfficeDeploymentCompanion.Resources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,7 +40,7 @@ namespace System.Xml
             xmlWriter.WriteEndElement();
         }
 
-        private static void WriteDefaultLanguageElement(this XmlWriter xmlWriter) => WriteLanguageElement(xmlWriter, "MatchOS");
+        private static void WriteDefaultLanguageElement(this XmlWriter xmlWriter) => WriteLanguageElement(xmlWriter, Constants.DefaultLanguageMatchOSId);
 
         private static void WriteLanguageElement(this XmlWriter xmlWriter, string languageCultureName)
         {
@@ -49,7 +50,8 @@ namespace System.Xml
             if (string.IsNullOrWhiteSpace(languageCultureName))
                 throw new ArgumentNullException(nameof(languageCultureName));
 
-            if (languageCultureName != "MatchOS" && Languages.AvailableDictionary.All(l => l.Id != languageCultureName))
+            if (languageCultureName != Constants.DefaultLanguageMatchOSId 
+                && Languages.AvailableDictionary.All(l => l.Id != languageCultureName))
                 throw new NotSupportedException($"Unsupported language: {languageCultureName}");
 
             xmlWriter.WriteStartElement("Language");

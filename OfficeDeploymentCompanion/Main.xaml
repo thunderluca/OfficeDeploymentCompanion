@@ -64,6 +64,9 @@
         <StackPanel Grid.Row="0" 
                     Grid.Column="1"
                     Margin="12">
+            <TextBlock Text="Languages" 
+                       Padding="4"
+                       Foreground="White" />
             <ComboBox ItemsSource="{Binding CurrentConfiguration.AvailableLanguages}" 
                       SelectedItem="{Binding CurrentConfiguration.SelectedAvailableLanguage, Mode=TwoWay}">
                 <ComboBox.ItemTemplate>
@@ -107,6 +110,61 @@
                                     Foreground="Red" 
                                     Background="Transparent"
                                     Click="OnAddedLanguageButtonClick" />
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" 
+                    Grid.Column="1"
+                    Margin="12">
+            <TextBlock Text="Programs" 
+                       Padding="4"
+                       Foreground="White" />
+            <ComboBox ItemsSource="{Binding CurrentConfiguration.AvailableProducts}" 
+                      SelectedItem="{Binding CurrentConfiguration.SelectedAvailableProduct, Mode=TwoWay}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}" 
+                                   Foreground="Black"
+                                   HorizontalAlignment="Stretch"
+                                   VerticalAlignment="Stretch"
+                                   TextAlignment="Left" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+            <ListBox ItemsSource="{Binding CurrentConfiguration.ExcludedProducts, Mode=OneWay}"
+                     Margin="0,12,0,0"
+                     SelectionMode="Single"
+                     Background="Transparent">
+                <ListBox.Resources>
+                    <Style TargetType="{x:Type ListBoxItem}">
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="Margin" Value="0" />
+                    </Style>
+                </ListBox.Resources>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0"
+                                       FontSize="14"
+                                       Text="{Binding Name}" 
+                                       Foreground="White"
+                                       VerticalAlignment="Stretch" />
+                            <Button Grid.Column="1" 
+                                    Content="x"
+                                    FontWeight="SemiBold"
+                                    Tag="{Binding Id}"
+                                    Foreground="Red" 
+                                    Background="Transparent"
+                                    Click="OnExcludedProductButtonClick" />
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
