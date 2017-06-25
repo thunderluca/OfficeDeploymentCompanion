@@ -1,9 +1,11 @@
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using OfficeDeploymentCompanion.WorkerServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace OfficeDeploymentCompanion.ViewModels
 {
@@ -19,9 +21,73 @@ namespace OfficeDeploymentCompanion.ViewModels
             this.WorkerServices = workerServices;
         }
 
+        private ConfigurationModel _currentConfiguration;
+        private RelayCommand _loadCommand, _saveCommand, _downloadCommand, _installCommand;
+
         public string Title
         {
             get { return "Office Deployment Companion"; }
+        }
+
+        public ConfigurationModel CurrentConfiguration
+        {
+            get { return _currentConfiguration; }
+            set { Set(nameof(CurrentConfiguration), ref _currentConfiguration, value); }
+        }
+
+        public bool ShowUnsavedChangesAlert { get; set; }
+
+        public RelayCommand LoadCommand
+        {
+            get
+            {
+                if (_loadCommand == null)
+                {
+                    _loadCommand = new RelayCommand(() =>
+                    {
+                        var filePath = this.WorkerServices.GetConfigurationFilePath();
+                        if (string.IsNullOrWhiteSpace(filePath)) return;
+
+                        var configuration = this.WorkerServices.LoadConfiguration(filePath);
+                        if (configuration != null)
+                        {
+                            this.CurrentConfiguration = configuration;
+                            return;
+                        }
+
+                        throw new ArgumentNullException(nameof(configuration));
+                    });
+                }
+
+                return _loadCommand;
+            }
+        }
+
+        public RelayCommand SaveCommand
+        {
+            get
+            {
+                if (_saveCommand == null)
+                {
+                    _saveCommand = new RelayCommand(() =>
+                    {
+                        var filePath = this.WorkerServices.SaveConfigurationFilePath();
+                        if (string.IsNullOrWhiteSpace(filePath)) return;
+
+                        try
+                        {
+                            this.WorkerServices.CreateConfiguration(filePath, this.CurrentConfiguration);
+                            MessageBox.Show("Configuration file saved succcessfully!");
+                        }
+                        catch (Exception exception)
+                        {
+                            MessageBox.Show($"Configuration file not saved! Error: {exception.Message}");
+                        }
+                    });
+                }
+
+                return _saveCommand;
+            }
         }
     }
 }

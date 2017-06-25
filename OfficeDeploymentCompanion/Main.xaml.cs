@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MahApps.Metro.Controls;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,7 +16,7 @@ using System.Windows.Shapes;
 
 namespace OfficeDeploymentCompanion
 {
-    public partial class Main : Window
+    public partial class Main : MetroWindow
     {
         public Main()
         {

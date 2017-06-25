@@ -49,7 +49,7 @@ namespace System.Xml
             if (string.IsNullOrWhiteSpace(languageCultureName))
                 throw new ArgumentNullException(nameof(languageCultureName));
 
-            if (Languages.AvailableDictionary.All(kvp => kvp.Value != languageCultureName))
+            if (Languages.AvailableDictionary.All(l => l.Id != languageCultureName))
                 throw new NotSupportedException($"Unsupported language: {languageCultureName}");
 
             xmlWriter.WriteStartElement("Language");
@@ -66,7 +66,7 @@ namespace System.Xml
             if (string.IsNullOrWhiteSpace(excludedAppId))
                 throw new ArgumentNullException(nameof(excludedAppId));
 
-            if (Products.AvailableDictionary.All(kvp => kvp.Value != excludedAppId))
+            if (Products.AvailableDictionary.All(p => p.Id != excludedAppId))
                 throw new NotSupportedException($"Unsupported product: {excludedAppId}");
 
             xmlWriter.WriteStartElement("ExcludeApp");

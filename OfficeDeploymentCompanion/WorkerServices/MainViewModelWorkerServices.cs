@@ -1,4 +1,6 @@
-﻿using OfficeDeploymentCompanion.Models;
+﻿using Microsoft.Win32;
+using OfficeDeploymentCompanion.Models;
+using OfficeDeploymentCompanion.Resources;
 using OfficeDeploymentCompanion.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -13,15 +15,11 @@ namespace OfficeDeploymentCompanion.WorkerServices
 {
     public class MainViewModelWorkerServices
     {
-        public string CreateDefaultConfiguration() => CreateConfiguration(
-            fileName: "configuration.xml", 
-            folder: Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+        public void CreateDefaultConfiguration() => CreateConfiguration(
+            filePath: Path.Combine(Constants.DefaultConfigurationFileName, Environment.GetFolderPath(Environment.SpecialFolder.Desktop)),
             configuration: new ConfigurationModel());
 
-        public string CreateConfiguration(
-            string fileName, 
-            string folder,
-            ConfigurationModel configuration)
+        public void CreateConfiguration(string filePath, ConfigurationModel configuration)
         {
             if (configuration == null)
             {
@@ -33,8 +31,7 @@ namespace OfficeDeploymentCompanion.WorkerServices
             //{
             //    throw new NotSupportedException("ARM architecture is not supported by Office Deployment Tool");
             //}
-
-            var filePath = Path.Combine(folder, fileName);
+            
             var xmlWriterSettings = GetDefaultXmlWriterSettings();
 
             var OSBitArchitecture = configuration.SelectedArchitecture.GetOSArchitecture();
@@ -55,8 +52,6 @@ namespace OfficeDeploymentCompanion.WorkerServices
                     xmlWriter.Flush();
                 }
             }
-
-            return filePath;
         }
 
         public ConfigurationModel InitializeConfiguration()
@@ -188,6 +183,35 @@ namespace OfficeDeploymentCompanion.WorkerServices
             }
         }
 
+        public string GetConfigurationFilePath()
+        {
+            var openFileDialog = new OpenFileDialog
+            {
+                DefaultExt = Constants.DefaultFileDialogExtension,
+                Filter = "Office XML configuration file (.xml)|*.xml"
+            };
+            var result = openFileDialog.ShowDialog();
+
+            if (result.GetValueOrDefault() != true) return null;
+
+            return openFileDialog.FileName;
+        }
+
+        public string SaveConfigurationFilePath()
+        {
+            var saveFileDialog = new SaveFileDialog
+            {
+                FileName = Constants.DefaultConfigurationFileName,
+                DefaultExt = Constants.DefaultFileDialogExtension,
+                Filter = "Office XML configuration file (.xml)|*.xml"
+            };
+            var result = saveFileDialog.ShowDialog();
+
+            if (result.GetValueOrDefault() != true) return null;
+
+            return saveFileDialog.FileName;
+        }
+
         private static bool GetValueFromBit(string value) => !string.IsNullOrWhiteSpace(value) ? value == "1" : false;
 
         private static bool GetValueFromBoolean(string value) => !string.IsNullOrWhiteSpace(value) ? Boolean.Parse(value) : false;
@@ -195,11 +219,11 @@ namespace OfficeDeploymentCompanion.WorkerServices
         public List<ConfigurationModel.Language> GetAvailableLanguages()
         {
             return Languages.AvailableDictionary
-                .OrderBy(kvp => kvp.Key)
-                .Select(kvp => new ConfigurationModel.Language
+                .OrderBy(l => l.Name)
+                .Select(l => new ConfigurationModel.Language
                 {
-                    Name = kvp.Key,
-                    Id = kvp.Value
+                    Name = $"{l.Name} ({l.Id})",
+                    Id = l.Id
                 })
                 .ToList();
         }
@@ -207,11 +231,11 @@ namespace OfficeDeploymentCompanion.WorkerServices
         public List<ConfigurationModel.Product> GetAvailableProducts()
         {
             return Products.AvailableDictionary
-                .OrderBy(kvp => kvp.Key)
-                .Select(kvp => new ConfigurationModel.Product
+                .OrderBy(p => p.Name)
+                .Select(p => new ConfigurationModel.Product
                 {
-                    Name = kvp.Key,
-                    Id = kvp.Value
+                    Name = p.Name,
+                    Id = p.Id
                 })
                 .ToList();
         }
