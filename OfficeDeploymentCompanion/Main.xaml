@@ -7,21 +7,65 @@
                       mc:Ignorable="d"
                       DataContext="{Binding Main, Source={StaticResource Locator}}"
                       Title="{Binding Title, Mode=OneTime}" 
-                      BorderBrush="{StaticResource OrangeOffice}"
+                      BorderBrush="{StaticResource AccentColorBrush}"
                       Background="{StaticResource DarkGrayVS}"
-                      WindowTitleBrush="{StaticResource OrangeOffice}"
+                      WindowTitleBrush="{StaticResource AccentColorBrush}"
                       GlowBrush="Black"
                       WindowStartupLocation="CenterScreen"
                       ResizeMode="NoResize"
                       Width="800"
                       Height="600">
+    <controls:MetroWindow.Resources>
+        <Style x:Key="DeleteButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="{DynamicResource GrayBrush10}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource TextBoxBorderBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="controls:ControlsHelper.ContentCharacterCasing" Value="Upper"/>
+            <Setter Property="controls:ControlsHelper.CornerRadius" Value="3"/>
+            <Setter Property="FontFamily" Value="{DynamicResource DefaultFont}"/>
+            <Setter Property="FontSize" Value="{DynamicResource UpperCaseContentFontSize}"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="{DynamicResource BlackBrush}"/>
+            <Setter Property="MinHeight" Value="25"/>
+            <Setter Property="Padding" Value="5,6"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid>
+                            <Border x:Name="Border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                            <Border x:Name="DisabledVisualElement" Background="{DynamicResource ControlsDisabledBrush}" CornerRadius="{Binding (controls:ControlsHelper.CornerRadius), Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" IsHitTestVisible="False" Opacity="0" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                            <controls:ContentControlEx x:Name="ButtonContentPresenter" ContentCharacterCasing="{Binding (controls:ControlsHelper.ContentCharacterCasing), RelativeSource={RelativeSource TemplatedParent}}" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" TargetName="ButtonContentPresenter" Value="White"/>
+                                <Setter Property="Background" TargetName="Border" Value="Transparent"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Foreground" TargetName="ButtonContentPresenter" Value="White"/>
+                                <Setter Property="Background" TargetName="Border" Value="Transparent"/>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                                <Setter Property="BorderBrush" TargetName="Border" Value="{DynamicResource ButtonMouseOverBorderBrush}"/>
+                                <Setter Property="BorderThickness" TargetName="Border" Value="2"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" TargetName="DisabledVisualElement" Value="0.7"/>
+                                <Setter Property="Opacity" TargetName="ButtonContentPresenter" Value="0.3"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </controls:MetroWindow.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition />
@@ -30,7 +74,20 @@
         <Grid Grid.Row="0" 
               Grid.Column="0"
               Margin="12">
-            <StackPanel VerticalAlignment="Bottom">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0"
+                       FontSize="32"
+                       TextWrapping="Wrap"
+                       FontWeight="SemiBold"
+                       FontFamily="Segoe UI"
+                       Text="{Binding Title}"
+                       Foreground="{StaticResource AccentColorBrush}" />
+
+            <StackPanel Grid.Row="1">
                 <TextBlock Text="Distribution Channel" 
                            Padding="4"
                            Foreground="White" />
@@ -121,16 +178,20 @@
                                        Foreground="White"
                                        VerticalAlignment="Stretch" />
                             <Button Grid.Column="1" 
-                                    Content="x"
+                                    Content="✖"
+                                    FontFamily="Segoe UI Symbol"
                                     FontWeight="SemiBold"
                                     Tag="{Binding Id}"
-                                    Foreground="Red" 
+                                    Foreground="{StaticResource AccentColorBrush}" 
+                                    BorderThickness="0"
                                     Background="Transparent"
-                                    Click="OnAddedLanguageButtonClick" />
+                                    Click="OnAddedLanguageButtonClick"
+                                    Style="{StaticResource DeleteButtonStyle}" />
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
+
             <TextBlock Text="No languages added" 
                        FontSize="14"
                        Foreground="White"
@@ -182,12 +243,15 @@
                                        Foreground="White"
                                        VerticalAlignment="Stretch" />
                             <Button Grid.Column="1" 
-                                    Content="x"
+                                    Content="✖"
+                                    FontFamily="Segoe UI Symbol"
                                     FontWeight="SemiBold"
                                     Tag="{Binding Id}"
-                                    Foreground="Red" 
+                                    Foreground="{StaticResource AccentColorBrush}" 
+                                    BorderThickness="0"
                                     Background="Transparent"
-                                    Click="OnExcludedProductButtonClick" />
+                                    Click="OnExcludedProductButtonClick"
+                                    Style="{StaticResource DeleteButtonStyle}" />
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
@@ -235,7 +299,7 @@
             <StackPanel Grid.Column="1"
                         VerticalAlignment="Center">
                 <TextBlock TextAlignment="Center"
-                           Foreground="{StaticResource OrangeOffice}"
+                           Foreground="{StaticResource AccentColorBrush}"
                            Text="Selected file path" 
                            FontWeight="SemiBold"
                            FontSize="14"

@@ -5,7 +5,7 @@
                     d1p1:Ignorable="options">
     <Color x:Key="HighlightColor">#FFE8724E</Color>
     <!--80%-->
-    <Color x:Key="AccentColor">#CCEB3B00</Color>
+    <Color x:Key="AccentColor">#FFEB3B00</Color>
     <!--60%-->
     <Color x:Key="AccentColor2">#99EB3B00</Color>
     <!--40%-->
