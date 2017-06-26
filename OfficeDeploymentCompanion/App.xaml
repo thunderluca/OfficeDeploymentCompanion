@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              d1p1:Ignorable="d" 
              xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:converters="clr-namespace:OfficeDeploymentCompanion.Converters"
              xmlns:vm="clr-namespace:OfficeDeploymentCompanion.ViewModels">
     <Application.Resources>
         <ResourceDictionary>
@@ -21,7 +22,11 @@
 
             <SolidColorBrush x:Key="DarkGrayVS">#333333</SolidColorBrush>
             <SolidColorBrush x:Key="OrangeOffice">#EB3B00</SolidColorBrush>
+            
             <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" />
+
+            <converters:CountToVisibilityConverter x:Key="CountToVisibilityConverter" />
+            <converters:CountToOppositeVisibilityConverter x:Key="CountToOppositeVisibilityConverter" />
         </ResourceDictionary>
   </Application.Resources>
 </Application>

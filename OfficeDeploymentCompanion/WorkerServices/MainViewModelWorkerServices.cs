@@ -18,7 +18,7 @@ namespace OfficeDeploymentCompanion.WorkerServices
     {
         public void CreateDefaultConfiguration() => CreateConfiguration(
             filePath: Path.Combine(Constants.DefaultConfigurationFileName, Environment.GetFolderPath(Environment.SpecialFolder.Desktop)),
-            configuration: new ConfigurationModel());
+            configuration: InitializeConfiguration());
 
         public void CreateConfiguration(string filePath, ConfigurationModel configuration)
         {
@@ -63,18 +63,7 @@ namespace OfficeDeploymentCompanion.WorkerServices
             var channels = EnumHelper.GetEnumValuesArray<Channel>().ToList();
             var editions = EnumHelper.GetEnumValuesArray<OfficeClientEdition>().ToList();
 
-            return new ConfigurationModel
-            {
-                AvailableLanguages = languages,
-                AvailableProducts = products,
-                AvailableChannels = channels,
-                AvailableEditions = editions,
-                AddedLanguages = new ObservableCollection<ConfigurationModel.Language>(),
-                ExcludedProducts = new ObservableCollection<ConfigurationModel.Product>(),
-                EnableUpdates = true,
-                SelectedChannel = Channel.Current,
-                SelectedEdition = OfficeClientEdition.X86
-            };
+            return new ConfigurationModel(languages, products, channels, editions);
         }
 
         public ConfigurationModel LoadConfiguration(string filePath)

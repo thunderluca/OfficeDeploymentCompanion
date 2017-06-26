@@ -11,10 +11,30 @@ namespace OfficeDeploymentCompanion.ViewModels
 {
     public class ConfigurationModel : ViewModelBase
     {
-        private Language _selectedAvailableLanguage;
+        public ConfigurationModel(
+            List<Language> availableLanguages,
+            List<Product> availableProducts,
+            List<Channel> availableChannels,
+            List<OfficeClientEdition> availableEditions)
+        {
+            AddedLanguages = new ObservableCollection<Language>();
+            ExcludedProducts = new ObservableCollection<Product>();
+            EnableUpdates = true;
+            AvailableLanguages = availableLanguages;
+            AvailableProducts = availableProducts;
+            AvailableChannels = availableChannels;
+            AvailableEditions = availableEditions;
+
+            SelectedLanguage = AvailableLanguages.FirstOrDefault(l => string.IsNullOrWhiteSpace(l.Id));
+            SelectedProduct = AvailableProducts.FirstOrDefault(p => string.IsNullOrWhiteSpace(p.Id));
+            SelectedChannel = AvailableChannels.FirstOrDefault();
+            SelectedEdition = AvailableEditions.FirstOrDefault();
+        }
+
+        private Language _selectedLanguage;
         private List<Language> _availableLanguages;
         private ObservableCollection<Language> _addedLanguages;
-        private Product _selectedAvailableProduct;
+        private Product _selectedProduct;
         private List<Product> _availableProducts;
         private ObservableCollection<Product> _excludedProducts;
         private bool _enableUpdates, _autoActivate, _forceAppShutdown, _pinIconsToTaskBar;
@@ -30,21 +50,21 @@ namespace OfficeDeploymentCompanion.ViewModels
             set { Set(nameof(AvailableLanguages), ref _availableLanguages, value); }
         }
 
-        public Language SelectedAvailableLanguage
+        public Language SelectedLanguage
         {
-            get { return _selectedAvailableLanguage; }
+            get { return _selectedLanguage; }
             set
             {
-                if (!Set(nameof(SelectedAvailableLanguage), ref _selectedAvailableLanguage, value)) return;
+                if (!Set(nameof(SelectedLanguage), ref _selectedLanguage, value)) return;
 
-                if (_selectedAvailableLanguage == null) return;
+                if (_selectedLanguage == null) return;
 
-                if (string.IsNullOrWhiteSpace(_selectedAvailableLanguage.Id) || 
-                    this.AddedLanguages.Any(l => l.Id == _selectedAvailableLanguage.Id)) return;
+                if (string.IsNullOrWhiteSpace(_selectedLanguage.Id) || 
+                    this.AddedLanguages.Any(l => l.Id == _selectedLanguage.Id)) return;
 
-                this.AddedLanguages.Add(_selectedAvailableLanguage);
+                this.AddedLanguages.Add(_selectedLanguage);
 
-                this.SelectedAvailableLanguage = null;
+                this.SelectedLanguage = null;
             }
         }
 
@@ -60,21 +80,21 @@ namespace OfficeDeploymentCompanion.ViewModels
             set { Set(nameof(AvailableProducts), ref _availableProducts, value); }
         }
 
-        public Product SelectedAvailableProduct
+        public Product SelectedProduct
         {
-            get { return _selectedAvailableProduct; }
+            get { return _selectedProduct; }
             set
             {
-                if (!Set(nameof(SelectedAvailableProduct), ref _selectedAvailableProduct, value)) return;
+                if (!Set(nameof(SelectedProduct), ref _selectedProduct, value)) return;
 
-                if (_selectedAvailableProduct == null) return;
+                if (_selectedProduct == null) return;
 
-                if (string.IsNullOrWhiteSpace(_selectedAvailableProduct.Id) ||
-                    this.ExcludedProducts.Any(l => l.Id == _selectedAvailableProduct.Id)) return;
+                if (string.IsNullOrWhiteSpace(_selectedProduct.Id) ||
+                    this.ExcludedProducts.Any(l => l.Id == _selectedProduct.Id)) return;
 
-                this.ExcludedProducts.Add(_selectedAvailableProduct);
+                this.ExcludedProducts.Add(_selectedProduct);
 
-                this.SelectedAvailableProduct = null;
+                this.SelectedProduct = null;
             }
         }
 
