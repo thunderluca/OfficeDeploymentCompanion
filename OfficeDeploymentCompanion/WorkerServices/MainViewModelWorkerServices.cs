@@ -5,18 +5,24 @@ using OfficeDeploymentCompanion.Resources;
 using OfficeDeploymentCompanion.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Xml;
 
 namespace OfficeDeploymentCompanion.WorkerServices
 {
     public class MainViewModelWorkerServices
     {
+        public string GetDefaultFilePath() => Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+            Constants.DefaultConfigurationFileName);
+
         public void CreateDefaultConfiguration() => CreateConfiguration(
-            filePath: Path.Combine(Constants.DefaultConfigurationFileName, Environment.GetFolderPath(Environment.SpecialFolder.Desktop)),
+            filePath: GetDefaultFilePath(),
             configuration: InitializeConfiguration());
 
         public void CreateConfiguration(string filePath, ConfigurationModel configuration)
@@ -42,13 +48,13 @@ namespace OfficeDeploymentCompanion.WorkerServices
                         languages: configuration.AddedLanguages.Select(l => l.Id),
                         excludedAppIds: configuration.ExcludedProducts.Select(p => p.Id));
                     xmlWriter.WriteEndElement();
-                    xmlWriter.WriteEndElement();
                     xmlWriter.WriteUpdatesElement(configuration.EnableUpdates, configuration.SelectedChannel);
                     xmlWriter.WriteDisplayElement(configuration.SilentMode, configuration.AcceptEula);
                     xmlWriter.WritePropertyElement("AUTOACTIVATE", (configuration.AutoActivate.GetBitStringFromBoolean()));
                     xmlWriter.WritePropertyElement("FORCEAPPSHUTDOWN", (configuration.ForceAppShutdown.GetBooleanStringFromBoolean()));
                     xmlWriter.WritePropertyElement("PinIconsToTaskBar", (configuration.PinIconsToTaskBar.GetBooleanStringFromBoolean()));
                     xmlWriter.WritePropertyElement("SharedComputerLicensing", (configuration.SharedComputerLicensing.GetBitStringFromBoolean()));
+                    xmlWriter.WriteEndElement();
                     xmlWriter.Flush();
                 }
             }
@@ -246,6 +252,72 @@ namespace OfficeDeploymentCompanion.WorkerServices
             return products;
         }
 
+        public async Task DownloadAsync(string filePath)
+        {
+            try
+            {
+                var folder = Path.GetDirectoryName(filePath);
 
+                CheckSetupFile(folder);
+
+                var processStartInfo = new ProcessStartInfo
+                {
+                    WorkingDirectory = folder,
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    FileName = Constants.DefaultSetupFileName,
+                    Arguments = $"/download \"{filePath}\""
+                };
+
+                var process = new Process
+                {
+                    StartInfo = processStartInfo
+                };
+
+                process.Start();
+                process.WaitForExit();
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show($"Error: {exception.Message}");
+            }
+        }
+
+        public void Install(string filePath)
+        {
+            try
+            {
+                var folder = Path.GetDirectoryName(filePath);
+
+                CheckSetupFile(folder);
+
+                var processStartInfo = new ProcessStartInfo
+                {
+                    WorkingDirectory = folder,
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    FileName = "setup.exe",
+                    Arguments = $"/configure \"{filePath}\""
+                };
+
+                var process = new Process
+                {
+                    StartInfo = processStartInfo
+                };
+
+                process.Start();
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show($"Error: {exception.Message}");
+            }
+        }
+
+        private static void CheckSetupFile(string folder)
+        {
+            var setupFilePath = Path.Combine(folder, Constants.DefaultSetupFileName);
+            if (!File.Exists(setupFilePath))
+            {
+                throw new FileNotFoundException("setup.exe not found in folder that contains configuration file");
+            }
+        }
     }
 }

@@ -22,14 +22,23 @@ namespace OfficeDeploymentCompanion.ViewModels
 
             if (this.CurrentConfiguration == null)
                 this.CurrentConfiguration = this.WorkerServices.InitializeConfiguration();
+
+            this.SelectedFilePath = this.WorkerServices.GetDefaultFilePath();
         }
 
+        private string _selectedFilePath;
         private ConfigurationModel _currentConfiguration;
         private RelayCommand _loadCommand, _saveCommand, _downloadCommand, _installCommand;
 
         public string Title
         {
             get { return "Office Deployment Tool Companion"; }
+        }
+
+        public string SelectedFilePath
+        {
+            get { return _selectedFilePath; }
+            set { Set(nameof(SelectedFilePath), ref _selectedFilePath, value); }
         }
 
         public ConfigurationModel CurrentConfiguration
@@ -50,6 +59,8 @@ namespace OfficeDeploymentCompanion.ViewModels
                     {
                         var filePath = this.WorkerServices.GetConfigurationFilePath();
                         if (string.IsNullOrWhiteSpace(filePath)) return;
+
+                        this.SelectedFilePath = filePath;
 
                         var configuration = this.WorkerServices.LoadConfiguration(filePath);
                         if (configuration != null)
@@ -77,10 +88,12 @@ namespace OfficeDeploymentCompanion.ViewModels
                         var filePath = this.WorkerServices.SaveConfigurationFilePath();
                         if (string.IsNullOrWhiteSpace(filePath)) return;
 
+                        this.SelectedFilePath = filePath;
+
                         try
                         {
                             this.WorkerServices.CreateConfiguration(filePath, this.CurrentConfiguration);
-                            MessageBox.Show("Configuration file saved succcessfully!");
+                            MessageBox.Show("Configuration file successfully saved!");
                         }
                         catch (Exception exception)
                         {
@@ -90,6 +103,42 @@ namespace OfficeDeploymentCompanion.ViewModels
                 }
 
                 return _saveCommand;
+            }
+        }
+
+        public RelayCommand DownloadCommand
+        {
+            get
+            {
+                if (_downloadCommand == null)
+                {
+                    _downloadCommand = new RelayCommand(async () =>
+                    {
+                        if (string.IsNullOrWhiteSpace(this.SelectedFilePath)) return;
+
+                        await this.WorkerServices.DownloadAsync(this.SelectedFilePath);
+                    });
+                }
+
+                return _downloadCommand;
+            }
+        }
+
+        public RelayCommand InstallCommand
+        {
+            get
+            {
+                if (_installCommand == null)
+                {
+                    _installCommand = new RelayCommand(() =>
+                    {
+                        if (string.IsNullOrWhiteSpace(this.SelectedFilePath)) return;
+
+                        this.WorkerServices.Install(this.SelectedFilePath);
+                    });
+                }
+
+                return _installCommand;
             }
         }
     }

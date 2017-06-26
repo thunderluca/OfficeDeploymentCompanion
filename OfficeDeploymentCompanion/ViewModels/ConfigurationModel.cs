@@ -17,18 +17,18 @@ namespace OfficeDeploymentCompanion.ViewModels
             List<Channel> availableChannels,
             List<OfficeClientEdition> availableEditions)
         {
-            AddedLanguages = new ObservableCollection<Language>();
-            ExcludedProducts = new ObservableCollection<Product>();
-            EnableUpdates = true;
-            AvailableLanguages = availableLanguages;
-            AvailableProducts = availableProducts;
-            AvailableChannels = availableChannels;
-            AvailableEditions = availableEditions;
+            this.AddedLanguages = new ObservableCollection<Language>();
+            this.ExcludedProducts = new ObservableCollection<Product>();
+            this.EnableUpdates = true;
+            this.AvailableLanguages = availableLanguages;
+            this.AvailableProducts = availableProducts;
+            this.AvailableChannels = availableChannels;
+            this.AvailableEditions = availableEditions;
 
-            SelectedLanguage = AvailableLanguages.FirstOrDefault(l => string.IsNullOrWhiteSpace(l.Id));
-            SelectedProduct = AvailableProducts.FirstOrDefault(p => string.IsNullOrWhiteSpace(p.Id));
-            SelectedChannel = AvailableChannels.FirstOrDefault();
-            SelectedEdition = AvailableEditions.FirstOrDefault();
+            this.SelectedLanguage = AvailableLanguages.FirstOrDefault(l => string.IsNullOrWhiteSpace(l.Id));
+            this.SelectedProduct = AvailableProducts.FirstOrDefault(p => string.IsNullOrWhiteSpace(p.Id));
+            this.SelectedChannel = AvailableChannels.FirstOrDefault();
+            this.SelectedEdition = AvailableEditions.FirstOrDefault();
         }
 
         private Language _selectedLanguage;
