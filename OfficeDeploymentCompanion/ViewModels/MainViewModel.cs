@@ -1,5 +1,7 @@
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Threading;
+using MahApps.Metro.Controls.Dialogs;
 using OfficeDeploymentCompanion.WorkerServices;
 using System;
 using System.Collections.Generic;
@@ -13,13 +15,18 @@ namespace OfficeDeploymentCompanion.ViewModels
     public class MainViewModel : ViewModelBase
     {
         private readonly MainViewModelWorkerServices WorkerServices;
+        private readonly IDialogCoordinator DialogCoordinator;
 
-        public MainViewModel(MainViewModelWorkerServices workerServices)
+        public MainViewModel(MainViewModelWorkerServices workerServices, IDialogCoordinator dialogCoordinator)
         {
             if (workerServices == null)
                 throw new ArgumentNullException(nameof(workerServices));
 
+            if (dialogCoordinator == null)
+                throw new ArgumentNullException(nameof(dialogCoordinator));
+
             this.WorkerServices = workerServices;
+            this.DialogCoordinator = dialogCoordinator;
 
             if (this.CurrentConfiguration == null)
                 this.CurrentConfiguration = this.WorkerServices.InitializeConfiguration();
@@ -27,6 +34,7 @@ namespace OfficeDeploymentCompanion.ViewModels
             this.SelectedFilePath = this.WorkerServices.GetDefaultFilePath();
         }
 
+        private bool _isBusy;
         private string _selectedFilePath;
         private ConfigurationModel _currentConfiguration;
         private RelayCommand _loadCommand, _saveCommand, _downloadCommand, _installCommand;
@@ -35,6 +43,12 @@ namespace OfficeDeploymentCompanion.ViewModels
         public string Title
         {
             get { return "Office Deployment Tool Companion"; }
+        }
+
+        public bool IsBusy
+        {
+            get { return _isBusy; }
+            set { Set(nameof(IsBusy), ref _isBusy, value); }
         }
 
         public string SelectedFilePath
@@ -96,12 +110,7 @@ namespace OfficeDeploymentCompanion.ViewModels
             {
                 if (_downloadCommand == null)
                 {
-                    _downloadCommand = new RelayCommand(async () =>
-                    {
-                        if (string.IsNullOrWhiteSpace(this.SelectedFilePath)) return;
-
-                        await this.WorkerServices.DownloadAsync(this.SelectedFilePath, this.CurrentConfiguration);
-                    });
+                    _downloadCommand = new RelayCommand(async () => await DownloadFilesAsync());
                 }
 
                 return _downloadCommand;
@@ -117,6 +126,10 @@ namespace OfficeDeploymentCompanion.ViewModels
                     _installCommand = new RelayCommand(async () =>
                     {
                         if (string.IsNullOrWhiteSpace(this.SelectedFilePath)) return;
+
+                        var officeFilesExist = this.WorkerServices.DidUserDownloadPackages(this.SelectedFilePath);
+                        if (!officeFilesExist)
+                            await DownloadFilesAsync();
 
                         await this.WorkerServices.InstallAsync(this.SelectedFilePath, this.CurrentConfiguration);
                     });
@@ -155,6 +168,25 @@ namespace OfficeDeploymentCompanion.ViewModels
                 return _windowClosingCommand;
             }
         }
+
+        private async Task DownloadFilesAsync()
+        {
+            if (string.IsNullOrWhiteSpace(this.SelectedFilePath)) return;
+
+            var progressDialogController = await DialogCoordinator.ShowProgressAsync(
+                                context: this,
+                                title: "Downloading Office packages",
+                                message: "Please wait. It took minutes or hours depending on your Internet connection speed",
+                                isCancelable: true).ConfigureAwait(false);
+            progressDialogController.Canceled += OnProgressDialogControllerCanceled;
+
+            await this.WorkerServices.DownloadAsync(this.SelectedFilePath, this.CurrentConfiguration);
+
+            progressDialogController.Canceled -= OnProgressDialogControllerCanceled;
+            await progressDialogController.CloseAsync();
+        }
+
+        private void OnProgressDialogControllerCanceled(object sender, EventArgs e) => this.WorkerServices.CancelDownload();
 
         private async Task SaveConfigurationAsync()
         {

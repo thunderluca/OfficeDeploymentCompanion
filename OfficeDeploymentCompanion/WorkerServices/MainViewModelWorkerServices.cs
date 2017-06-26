@@ -17,6 +17,8 @@ namespace OfficeDeploymentCompanion.WorkerServices
 {
     public class MainViewModelWorkerServices
     {
+        private static Process DownloadProcess { get; set; }
+
         public string GetDefaultFilePath() => Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
             Constants.DefaultConfigurationFileName);
@@ -261,24 +263,59 @@ namespace OfficeDeploymentCompanion.WorkerServices
 
                 var processStartInfo = new ProcessStartInfo
                 {
+                    UseShellExecute = true,
                     WorkingDirectory = folder,
                     WindowStyle = ProcessWindowStyle.Hidden,
                     FileName = Constants.DefaultSetupFileName,
                     Arguments = $"/download \"{filePath}\""
                 };
 
-                var process = new Process
+                DownloadProcess = new Process
                 {
                     StartInfo = processStartInfo
                 };
 
-                process.Start();
-                process.WaitForExit();
+                DownloadProcess.Start();
+                DownloadProcess.WaitForExit();
+
+                DownloadProcess = null;
             }
             catch (Exception exception)
             {
                 MessageBox.Show($"Error: {exception.Message}");
             }
+        }
+
+        public void CancelDownload()
+        {
+            try
+            {
+                if (DownloadProcess == null) return;
+
+                var processes = Process.GetProcessesByName(DownloadProcess.ProcessName);
+                if (processes == null) return;
+
+                foreach (var p in processes)
+                    p.Kill();
+
+                DownloadProcess = null;
+            }
+            catch (Exception exception)
+            {
+                throw exception;
+            }
+        }
+
+        public bool DidUserDownloadPackages(string filePath)
+        {
+            var folder = Path.GetDirectoryName(filePath);
+
+            var officeFolderPath = Path.Combine(folder, "Office");
+
+            if (!Directory.Exists(officeFolderPath)) return false;
+
+            var folders = Directory.EnumerateDirectories(officeFolderPath);
+            return folders != null && folders.Count() > 0;
         }
 
         public async Task InstallAsync(string filePath, ConfigurationModel configuration)

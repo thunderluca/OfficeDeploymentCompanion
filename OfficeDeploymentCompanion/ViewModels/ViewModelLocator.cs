@@ -1,4 +1,5 @@
 using GalaSoft.MvvmLight.Ioc;
+using MahApps.Metro.Controls.Dialogs;
 using Microsoft.Practices.ServiceLocation;
 using OfficeDeploymentCompanion.WorkerServices;
 
@@ -11,6 +12,7 @@ namespace OfficeDeploymentCompanion.ViewModels
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
             SimpleIoc.Default.Register<MainViewModelWorkerServices>();
+            SimpleIoc.Default.Register<IDialogCoordinator>(() => DialogCoordinator.Instance);
 
             SimpleIoc.Default.Register<MainViewModel>();
         }
