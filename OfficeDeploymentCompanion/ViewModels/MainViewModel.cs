@@ -178,6 +178,7 @@ namespace OfficeDeploymentCompanion.ViewModels
                                 title: "Downloading Office packages",
                                 message: "Please wait. It took minutes or hours depending on your Internet connection speed",
                                 isCancelable: true).ConfigureAwait(false);
+            progressDialogController.SetIndeterminate();
             progressDialogController.Canceled += OnProgressDialogControllerCanceled;
 
             await this.WorkerServices.DownloadAsync(this.SelectedFilePath, this.CurrentConfiguration);
