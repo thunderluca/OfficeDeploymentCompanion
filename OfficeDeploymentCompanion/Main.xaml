@@ -11,8 +11,10 @@
                       Background="{StaticResource DarkGrayVS}"
                       WindowTitleBrush="{StaticResource OrangeOffice}"
                       GlowBrush="Black"
-                      SaveWindowPosition="True"
-                      WindowStartupLocation="CenterScreen">
+                      WindowStartupLocation="CenterScreen"
+                      ResizeMode="NoResize"
+                      Width="800"
+                      Height="600">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -199,7 +201,13 @@
 
         <Grid Grid.Row="2" 
               Grid.ColumnSpan="2">
-            <StackPanel Orientation="Horizontal"
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" 
+                        Orientation="Horizontal"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Center">
                 <Button Content="Load"
@@ -208,23 +216,39 @@
                         Foreground="White"
                         BorderBrush="DarkGray"
                         BorderThickness="2.5"
-                        Background="{StaticResource DarkGrayVS}"
                         Padding="20,10"
                         Margin="16"
-                        Command="{Binding LoadCommand}" />
+                        Command="{Binding LoadCommand}"
+                        Style="{StaticResource AccentedSquareButtonStyle}" />
                 <Button Content="Save"
                         FontSize="16"
                         FontWeight="SemiBold"
                         Foreground="White"
                         BorderBrush="DarkGray"
                         BorderThickness="2.5"
-                        Background="{StaticResource DarkGrayVS}"
                         Padding="20,10"
                         Margin="0,16,16,16" 
-                        Command="{Binding SaveCommand}" />
+                        Command="{Binding SaveCommand}"
+                        Style="{StaticResource AccentedSquareButtonStyle}" />
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal"
+            <StackPanel Grid.Column="1"
+                        VerticalAlignment="Center">
+                <TextBlock TextAlignment="Center"
+                           Foreground="{StaticResource OrangeOffice}"
+                           Text="Selected file path" 
+                           FontWeight="SemiBold"
+                           FontSize="14"
+                           Padding="4" />
+                <TextBlock TextAlignment="Center"
+                           Foreground="White"
+                           FontSize="14"
+                           TextWrapping="Wrap"
+                           Text="{Binding SelectedFilePath, Mode=OneWay}" />
+            </StackPanel>
+
+            <StackPanel Grid.Column="2" 
+                        Orientation="Horizontal"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Center">
                 <Button Content="Download"
@@ -233,20 +257,20 @@
                         Foreground="White"
                         BorderBrush="DarkGray"
                         BorderThickness="2.5"
-                        Background="{StaticResource DarkGrayVS}"
                         Padding="20,10"
                         Margin="16"
-                        Command="{Binding DownloadCommand}" />
+                        Command="{Binding DownloadCommand}"
+                        Style="{StaticResource AccentedSquareButtonStyle}" />
                 <Button Content="Install"
                         FontSize="16"
                         FontWeight="SemiBold"
                         Foreground="White"
                         BorderBrush="DarkGray"
                         BorderThickness="2.5"
-                        Background="{StaticResource DarkGrayVS}"
                         Padding="20,10"
                         Margin="0,16,16,16"
-                        Command="{Binding InstallCommand}" />
+                        Command="{Binding InstallCommand}"
+                        Style="{StaticResource AccentedSquareButtonStyle}" />
             </StackPanel>
         </Grid>
     </Grid>

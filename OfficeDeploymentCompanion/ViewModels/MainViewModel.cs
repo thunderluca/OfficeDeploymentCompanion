@@ -55,14 +55,14 @@ namespace OfficeDeploymentCompanion.ViewModels
             {
                 if (_loadCommand == null)
                 {
-                    _loadCommand = new RelayCommand(() =>
+                    _loadCommand = new RelayCommand(async () =>
                     {
                         var filePath = this.WorkerServices.GetConfigurationFilePath();
                         if (string.IsNullOrWhiteSpace(filePath)) return;
 
                         this.SelectedFilePath = filePath;
 
-                        var configuration = this.WorkerServices.LoadConfiguration(filePath);
+                        var configuration = await this.WorkerServices.LoadConfigurationAsync(filePath);
                         if (configuration != null)
                         {
                             this.CurrentConfiguration = configuration;
@@ -83,7 +83,7 @@ namespace OfficeDeploymentCompanion.ViewModels
             {
                 if (_saveCommand == null)
                 {
-                    _saveCommand = new RelayCommand(() =>
+                    _saveCommand = new RelayCommand(async () =>
                     {
                         var filePath = this.WorkerServices.SaveConfigurationFilePath();
                         if (string.IsNullOrWhiteSpace(filePath)) return;
@@ -92,7 +92,7 @@ namespace OfficeDeploymentCompanion.ViewModels
 
                         try
                         {
-                            this.WorkerServices.CreateConfiguration(filePath, this.CurrentConfiguration);
+                            await this.WorkerServices.CreateConfigurationAsync(filePath, this.CurrentConfiguration);
                             MessageBox.Show("Configuration file successfully saved!");
                         }
                         catch (Exception exception)
@@ -116,7 +116,7 @@ namespace OfficeDeploymentCompanion.ViewModels
                     {
                         if (string.IsNullOrWhiteSpace(this.SelectedFilePath)) return;
 
-                        await this.WorkerServices.DownloadAsync(this.SelectedFilePath);
+                        await this.WorkerServices.DownloadAsync(this.SelectedFilePath, this.CurrentConfiguration);
                     });
                 }
 
@@ -130,11 +130,11 @@ namespace OfficeDeploymentCompanion.ViewModels
             {
                 if (_installCommand == null)
                 {
-                    _installCommand = new RelayCommand(() =>
+                    _installCommand = new RelayCommand(async () =>
                     {
                         if (string.IsNullOrWhiteSpace(this.SelectedFilePath)) return;
 
-                        this.WorkerServices.Install(this.SelectedFilePath);
+                        await this.WorkerServices.InstallAsync(this.SelectedFilePath, this.CurrentConfiguration);
                     });
                 }
 

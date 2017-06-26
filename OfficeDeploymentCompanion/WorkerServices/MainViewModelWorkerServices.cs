@@ -21,11 +21,7 @@ namespace OfficeDeploymentCompanion.WorkerServices
             Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
             Constants.DefaultConfigurationFileName);
 
-        public void CreateDefaultConfiguration() => CreateConfiguration(
-            filePath: GetDefaultFilePath(),
-            configuration: InitializeConfiguration());
-
-        public void CreateConfiguration(string filePath, ConfigurationModel configuration)
+        public async Task CreateConfigurationAsync(string filePath, ConfigurationModel configuration)
         {
             if (configuration == null)
             {
@@ -71,7 +67,7 @@ namespace OfficeDeploymentCompanion.WorkerServices
             return new ConfigurationModel(languages, products, channels, editions);
         }
 
-        public ConfigurationModel LoadConfiguration(string filePath)
+        public async Task<ConfigurationModel> LoadConfigurationAsync(string filePath)
         {
             var configurationModel = InitializeConfiguration();
 
@@ -252,10 +248,13 @@ namespace OfficeDeploymentCompanion.WorkerServices
             return products;
         }
 
-        public async Task DownloadAsync(string filePath)
+        public async Task DownloadAsync(string filePath, ConfigurationModel configuration)
         {
             try
             {
+                var continueOperation = await CheckConfigurationFileAsync(filePath, configuration);
+                if (!continueOperation) return;
+
                 var folder = Path.GetDirectoryName(filePath);
 
                 CheckSetupFile(folder);
@@ -282,10 +281,13 @@ namespace OfficeDeploymentCompanion.WorkerServices
             }
         }
 
-        public void Install(string filePath)
+        public async Task InstallAsync(string filePath, ConfigurationModel configuration)
         {
             try
             {
+                var continueOperation = await CheckConfigurationFileAsync(filePath, configuration);
+                if (!continueOperation) return;
+
                 var folder = Path.GetDirectoryName(filePath);
 
                 CheckSetupFile(folder);
@@ -311,7 +313,23 @@ namespace OfficeDeploymentCompanion.WorkerServices
             }
         }
 
-        private static void CheckSetupFile(string folder)
+        private async Task<bool> CheckConfigurationFileAsync(string filePath, ConfigurationModel configuration)
+        {
+            if (!File.Exists(filePath))
+            {
+                var messageBoxResult = MessageBox.Show(
+                    messageBoxText: "No configuration saved found, do you want to create it with selected unsaved options?",
+                    caption: "Configuration not found", button: MessageBoxButton.YesNo);
+
+                if (messageBoxResult != MessageBoxResult.Yes && messageBoxResult != MessageBoxResult.OK) return false;
+
+                await this.CreateConfigurationAsync(filePath, configuration);
+            }
+
+            return true;
+        }
+
+        private void CheckSetupFile(string folder)
         {
             var setupFilePath = Path.Combine(folder, Constants.DefaultSetupFileName);
             if (!File.Exists(setupFilePath))
