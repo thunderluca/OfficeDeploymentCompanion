@@ -1,6 +1,5 @@
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Threading;
 using MahApps.Metro.Controls.Dialogs;
 using OfficeDeploymentCompanion.WorkerServices;
 using System;
@@ -176,7 +175,7 @@ namespace OfficeDeploymentCompanion.ViewModels
             var progressDialogController = await DialogCoordinator.ShowProgressAsync(
                                 context: this,
                                 title: "Downloading Office packages",
-                                message: "Please wait. It took minutes or hours depending on your Internet connection speed",
+                                message: "Please wait, this process will take minutes or hours depending on your Internet connection download speed",
                                 isCancelable: true).ConfigureAwait(false);
             progressDialogController.SetIndeterminate();
             progressDialogController.Canceled += OnProgressDialogControllerCanceled;
