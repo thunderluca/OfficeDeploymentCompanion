@@ -41,5 +41,14 @@ namespace OfficeDeploymentCompanion
             if (productToReInclude != null)
                 ViewModel.CurrentConfiguration.ExcludedProducts.Remove(productToReInclude);
         }
+
+        private void OnCommonComboBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!(sender is ComboBox)) return;
+
+            var comboBox = sender as ComboBox;
+            if (comboBox.SelectedIndex != 0)
+                comboBox.SelectedIndex = 0;
+        }
     }
 }

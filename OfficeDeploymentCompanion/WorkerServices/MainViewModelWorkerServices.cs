@@ -337,5 +337,12 @@ namespace OfficeDeploymentCompanion.WorkerServices
                 throw new FileNotFoundException("setup.exe not found in folder that contains configuration file");
             }
         }
+
+        public bool HasCurrentConfigurationUnsavedChanges(ConfigurationModel configuration)
+        {
+            var defaultConfiguration = InitializeConfiguration();
+
+            return !defaultConfiguration.Equals(configuration);
+        }
     }
 }

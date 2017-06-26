@@ -3,6 +3,7 @@ using GalaSoft.MvvmLight.Command;
 using OfficeDeploymentCompanion.WorkerServices;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -29,6 +30,7 @@ namespace OfficeDeploymentCompanion.ViewModels
         private string _selectedFilePath;
         private ConfigurationModel _currentConfiguration;
         private RelayCommand _loadCommand, _saveCommand, _downloadCommand, _installCommand;
+        private RelayCommand<CancelEventArgs> _windowClosingCommand;
 
         public string Title
         {
@@ -46,8 +48,6 @@ namespace OfficeDeploymentCompanion.ViewModels
             get { return _currentConfiguration; }
             set { Set(nameof(CurrentConfiguration), ref _currentConfiguration, value); }
         }
-
-        public bool ShowUnsavedChangesAlert { get; set; }
 
         public RelayCommand LoadCommand
         {
@@ -83,23 +83,7 @@ namespace OfficeDeploymentCompanion.ViewModels
             {
                 if (_saveCommand == null)
                 {
-                    _saveCommand = new RelayCommand(async () =>
-                    {
-                        var filePath = this.WorkerServices.SaveConfigurationFilePath();
-                        if (string.IsNullOrWhiteSpace(filePath)) return;
-
-                        this.SelectedFilePath = filePath;
-
-                        try
-                        {
-                            await this.WorkerServices.CreateConfigurationAsync(filePath, this.CurrentConfiguration);
-                            MessageBox.Show("Configuration file successfully saved!");
-                        }
-                        catch (Exception exception)
-                        {
-                            MessageBox.Show($"Configuration file not saved! Error: {exception.Message}");
-                        }
-                    });
+                    _saveCommand = new RelayCommand(async () => await SaveConfigurationAsync());
                 }
 
                 return _saveCommand;
@@ -139,6 +123,54 @@ namespace OfficeDeploymentCompanion.ViewModels
                 }
 
                 return _installCommand;
+            }
+        }
+
+        public RelayCommand<CancelEventArgs> WindowClosingCommand
+        {
+            get
+            {
+                if (_windowClosingCommand == null)
+                {
+                    _windowClosingCommand = new RelayCommand<CancelEventArgs>(async args =>
+                    {
+                        var hasUnsavedChanges = this.WorkerServices.HasCurrentConfigurationUnsavedChanges(this.CurrentConfiguration);
+                        if (hasUnsavedChanges)
+                        {
+                            var messageBoxResult = MessageBox.Show(
+                                messageBoxText: "The current configuration is not saved, do you want to save it before exit?",
+                                caption: "Unsaved changes detected",
+                                button: MessageBoxButton.YesNo);
+
+                            if (messageBoxResult == MessageBoxResult.Yes || messageBoxResult == MessageBoxResult.OK)
+                            {
+                                await SaveConfigurationAsync();
+
+                                Application.Current.Shutdown();
+                            }
+                        }
+                    });
+                }
+
+                return _windowClosingCommand;
+            }
+        }
+
+        private async Task SaveConfigurationAsync()
+        {
+            var filePath = this.WorkerServices.SaveConfigurationFilePath();
+            if (string.IsNullOrWhiteSpace(filePath)) return;
+
+            this.SelectedFilePath = filePath;
+
+            try
+            {
+                await this.WorkerServices.CreateConfigurationAsync(filePath, this.CurrentConfiguration);
+                MessageBox.Show("Configuration file successfully saved!");
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show($"Configuration file not saved! Error: {exception.Message}");
             }
         }
     }

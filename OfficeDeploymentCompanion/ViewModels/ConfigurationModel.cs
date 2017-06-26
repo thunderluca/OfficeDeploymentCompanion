@@ -183,5 +183,27 @@ namespace OfficeDeploymentCompanion.ViewModels
 
             public string Id { get; set; }
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+                throw new ArgumentNullException(nameof(obj));
+
+            var otherConfiguration = (ConfigurationModel)obj;
+            if (otherConfiguration == null)
+                throw new ArgumentNullException(nameof(otherConfiguration));
+
+            return this.AcceptEula.Equals(otherConfiguration.AcceptEula)
+                && this.AddedLanguages.SequenceEqual(otherConfiguration.AddedLanguages)
+                && this.AutoActivate.Equals(otherConfiguration.AutoActivate)
+                && this.EnableUpdates.Equals(otherConfiguration.EnableUpdates)
+                && this.ExcludedProducts.SequenceEqual(otherConfiguration.ExcludedProducts)
+                && this.ForceAppShutdown.Equals(otherConfiguration.ForceAppShutdown)
+                && this.PinIconsToTaskBar.Equals(otherConfiguration.PinIconsToTaskBar)
+                && Equals(this.SelectedChannel, otherConfiguration.SelectedChannel)
+                && Equals(this.SelectedEdition, otherConfiguration.SelectedEdition)
+                && this.SharedComputerLicensing.Equals(otherConfiguration.SharedComputerLicensing)
+                && this.SilentMode.Equals(otherConfiguration.SilentMode);
+        }
     }
 }
