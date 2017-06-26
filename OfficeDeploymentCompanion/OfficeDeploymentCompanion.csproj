@@ -76,6 +76,7 @@
     <Compile Include="Converters\CountToVisibilityConverter.cs" />
     <Compile Include="Extensions\LinqExtensions.cs" />
     <Compile Include="Helpers\EnumHelper.cs" />
+    <Compile Include="Helpers\ValuesHelper.cs" />
     <Compile Include="Helpers\XmlWriterHelper.cs" />
     <Compile Include="Models\DisplayLevel.cs" />
     <Compile Include="Models\OfficeClientEdition.cs" />

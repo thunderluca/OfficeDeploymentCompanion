@@ -75,5 +75,29 @@ namespace OfficeDeploymentCompanion.Helpers
             xmlWriter.WriteAttributeString("ID", excludedAppId);
             xmlWriter.WriteEndElement();
         }
+
+        public static void WriteUpdatesElement(this XmlWriter xmlWriter, bool enableUpdates, Channel channel)
+        {
+            xmlWriter.WriteStartElement("Updates");
+            xmlWriter.WriteAttributeString("Enabled", enableUpdates.GetBooleanStringFromBoolean());
+            xmlWriter.WriteAttributeString("Channel", channel.ToString("G"));
+            xmlWriter.WriteEndElement();
+        }
+
+        public static void WriteDisplayElement(this XmlWriter xmlWriter, bool silentMode, bool acceptEula)
+        {
+            xmlWriter.WriteStartElement("Display");
+            xmlWriter.WriteAttributeString("Level", (silentMode ? DisplayLevel.None : DisplayLevel.Full).ToString());
+            xmlWriter.WriteAttributeString("AcceptEULA", acceptEula.GetBooleanStringFromBoolean());
+            xmlWriter.WriteEndElement();
+        }
+
+        public static void WritePropertyElement(this XmlWriter xmlWriter, string name, string value)
+        {
+            xmlWriter.WriteStartElement("Property");
+            xmlWriter.WriteAttributeString("Name", name);
+            xmlWriter.WriteAttributeString("Value", value);
+            xmlWriter.WriteEndElement();
+        }
     }
 }

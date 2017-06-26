@@ -26,12 +26,6 @@ namespace OfficeDeploymentCompanion.WorkerServices
             {
                 throw new ArgumentNullException(nameof(configuration));
             }
-
-            //if (configuration.SelectedArchitecture == CpuArchitecture.ARM 
-            //    || configuration.SelectedArchitecture == CpuArchitecture.ARM64)
-            //{
-            //    throw new NotSupportedException("ARM architecture is not supported by Office Deployment Tool");
-            //}
             
             var xmlWriterSettings = GetDefaultXmlWriterSettings();
 
@@ -50,6 +44,12 @@ namespace OfficeDeploymentCompanion.WorkerServices
                         excludedAppIds: configuration.ExcludedProducts.Select(p => p.Id));
                     xmlWriter.WriteEndElement();
                     xmlWriter.WriteEndElement();
+                    xmlWriter.WriteUpdatesElement(configuration.EnableUpdates, configuration.SelectedChannel);
+                    xmlWriter.WriteDisplayElement(configuration.SilentMode, configuration.AcceptEula);
+                    xmlWriter.WritePropertyElement("AUTOACTIVATE", (configuration.AutoActivate.GetBitStringFromBoolean()));
+                    xmlWriter.WritePropertyElement("FORCEAPPSHUTDOWN", (configuration.ForceAppShutdown.GetBooleanStringFromBoolean()));
+                    xmlWriter.WritePropertyElement("PinIconsToTaskBar", (configuration.PinIconsToTaskBar.GetBooleanStringFromBoolean()));
+                    xmlWriter.WritePropertyElement("SharedComputerLicensing", (configuration.SharedComputerLicensing.GetBitStringFromBoolean()));
                     xmlWriter.Flush();
                 }
             }
@@ -121,7 +121,7 @@ namespace OfficeDeploymentCompanion.WorkerServices
                             case "Updates":
                                 {
                                     var enableUpdates = xmlReader.GetAttribute("Enabled");
-                                    configurationModel.EnableUpdates = GetValueFromBoolean(enableUpdates);
+                                    configurationModel.EnableUpdates = enableUpdates.GetValueFromBoolean();
                                     break;
                                 }
                             case "Display":
@@ -131,7 +131,7 @@ namespace OfficeDeploymentCompanion.WorkerServices
                                         configurationModel.SilentMode = displayLevel.ToEnum<DisplayLevel>() == DisplayLevel.None;
 
                                     var acceptEula = xmlReader.GetAttribute("AcceptEULA");
-                                    configurationModel.AcceptEula = GetValueFromBoolean(acceptEula);
+                                    configurationModel.AcceptEula = acceptEula.GetValueFromBoolean();
                                     break;
                                 }
                             case "Property":
@@ -142,25 +142,25 @@ namespace OfficeDeploymentCompanion.WorkerServices
                                         case "AUTOACTIVATE":
                                             {
                                                 var value = xmlReader.GetAttribute("Value");
-                                                configurationModel.AutoActivate = GetValueFromBit(value);
+                                                configurationModel.AutoActivate = value.GetValueFromBit();
                                                 break;
                                             }
                                         case "FORCEAPPSHUTDOWN":
                                             {
                                                 var value = xmlReader.GetAttribute("Value");
-                                                configurationModel.ForceAppShutdown = GetValueFromBoolean(value);
+                                                configurationModel.ForceAppShutdown = value.GetValueFromBoolean();
                                                 break;
                                             }
                                         case "PinIconsToTaskBar":
                                             {
                                                 var value = xmlReader.GetAttribute("Value");
-                                                configurationModel.PinIconsToTaskBar = GetValueFromBoolean(value);
+                                                configurationModel.PinIconsToTaskBar = value.GetValueFromBoolean();
                                                 break;
                                             }
                                         case "SharedComputerLicensing":
                                             {
                                                 var value = xmlReader.GetAttribute("Value");
-                                                configurationModel.SharedComputerLicensing = GetValueFromBit(value);
+                                                configurationModel.SharedComputerLicensing = value.GetValueFromBit();
                                                 break;
                                             }
                                     }
@@ -206,10 +206,6 @@ namespace OfficeDeploymentCompanion.WorkerServices
 
             return saveFileDialog.FileName;
         }
-
-        private static bool GetValueFromBit(string value) => !string.IsNullOrWhiteSpace(value) ? value == "1" : false;
-
-        private static bool GetValueFromBoolean(string value) => !string.IsNullOrWhiteSpace(value) ? Boolean.Parse(value) : false;
 
         public List<ConfigurationModel.Language> GetAvailableLanguages()
         {
