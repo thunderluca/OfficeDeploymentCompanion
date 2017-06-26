@@ -41,7 +41,7 @@ namespace OfficeDeploymentCompanion.ViewModels
 
         public string Title
         {
-            get { return "Office Deployment Tool Companion"; }
+            get { return "Office 2016 Deployment Tool Companion"; }
         }
 
         public bool IsBusy
