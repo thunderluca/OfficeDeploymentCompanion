@@ -5,7 +5,6 @@ using OfficeDeploymentCompanion.Resources;
 using OfficeDeploymentCompanion.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -27,7 +26,7 @@ namespace OfficeDeploymentCompanion.WorkerServices
                 throw new ArgumentNullException(nameof(configuration));
             }
             
-            var xmlWriterSettings = GetDefaultXmlWriterSettings();
+            var xmlWriterSettings = XmlWriterHelper.GetDefaultXmlWriterSettings();
 
             var OSBitArchitecture = configuration.SelectedEdition.GetOSArchitecture();
 
@@ -247,12 +246,6 @@ namespace OfficeDeploymentCompanion.WorkerServices
             return products;
         }
 
-        private static XmlWriterSettings GetDefaultXmlWriterSettings() => new XmlWriterSettings
-        {
-            CloseOutput = true,
-            ConformanceLevel = ConformanceLevel.Fragment,
-            Indent = true,
-            OmitXmlDeclaration = true
-        };
+
     }
 }

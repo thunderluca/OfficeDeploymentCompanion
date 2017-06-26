@@ -11,6 +11,14 @@ namespace OfficeDeploymentCompanion.Helpers
 {
     public static class XmlWriterHelper
     {
+        public static XmlWriterSettings GetDefaultXmlWriterSettings() => new XmlWriterSettings
+        {
+            CloseOutput = true,
+            ConformanceLevel = ConformanceLevel.Fragment,
+            Indent = true,
+            OmitXmlDeclaration = true
+        };
+
         public static void WriteOffice365ProPlusRetailProductElement(
             this XmlWriter xmlWriter, 
             IEnumerable<string> languages = null, 
