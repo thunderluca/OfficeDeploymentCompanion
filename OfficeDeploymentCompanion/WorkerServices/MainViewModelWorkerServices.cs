@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using OfficeDeploymentCompanion.Helpers;
 using OfficeDeploymentCompanion.Models;
 using OfficeDeploymentCompanion.Resources;
 using OfficeDeploymentCompanion.ViewModels;
@@ -34,7 +35,7 @@ namespace OfficeDeploymentCompanion.WorkerServices
             
             var xmlWriterSettings = GetDefaultXmlWriterSettings();
 
-            var OSBitArchitecture = configuration.SelectedArchitecture.GetOSArchitecture();
+            var OSBitArchitecture = configuration.SelectedEdition.GetOSArchitecture();
 
             using (var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.ReadWrite))
             {
@@ -59,15 +60,20 @@ namespace OfficeDeploymentCompanion.WorkerServices
             var languages = GetAvailableLanguages();
             var products = GetAvailableProducts();
 
+            var channels = EnumHelper.GetEnumValuesArray<Channel>().ToList();
+            var editions = EnumHelper.GetEnumValuesArray<OfficeClientEdition>().ToList();
+
             return new ConfigurationModel
             {
                 AvailableLanguages = languages,
                 AvailableProducts = products,
+                AvailableChannels = channels,
+                AvailableEditions = editions,
                 AddedLanguages = new ObservableCollection<ConfigurationModel.Language>(),
                 ExcludedProducts = new ObservableCollection<ConfigurationModel.Product>(),
                 EnableUpdates = true,
                 SelectedChannel = Channel.Current,
-                SelectedArchitecture = OfficeClientEdition.X86
+                SelectedEdition = OfficeClientEdition.X86
             };
         }
 
@@ -96,10 +102,10 @@ namespace OfficeDeploymentCompanion.WorkerServices
                                         switch (Convert.ToInt32(officeClientEdition))
                                         {
                                             case 32:
-                                                configurationModel.SelectedArchitecture = OfficeClientEdition.X86;
+                                                configurationModel.SelectedEdition = OfficeClientEdition.X86;
                                                 break;
                                             case 64:
-                                                configurationModel.SelectedArchitecture = OfficeClientEdition.X64;
+                                                configurationModel.SelectedEdition = OfficeClientEdition.X64;
                                                 break;
                                             default:
                                                 throw new NotSupportedException($"Invalid OfficeClientEdition: {officeClientEdition}");
@@ -108,7 +114,7 @@ namespace OfficeDeploymentCompanion.WorkerServices
 
                                     var channel = xmlReader.GetAttribute("Channel");
                                     if (!string.IsNullOrWhiteSpace(channel))
-                                        configurationModel.SelectedChannel = (Channel)Enum.Parse(typeof(Channel), channel);
+                                        configurationModel.SelectedChannel = channel.ToEnum<Channel>();
                                     break;
                                 }
                             case "Language":
@@ -133,7 +139,7 @@ namespace OfficeDeploymentCompanion.WorkerServices
                                 {
                                     var displayLevel = xmlReader.GetAttribute("Level");
                                     if (!string.IsNullOrWhiteSpace(displayLevel))
-                                        configurationModel.DisplayLevel = (DisplayLevel)Enum.Parse(typeof(DisplayLevel), displayLevel);
+                                        configurationModel.SilentMode = displayLevel.ToEnum<DisplayLevel>() == DisplayLevel.None;
 
                                     var acceptEula = xmlReader.GetAttribute("AcceptEULA");
                                     configurationModel.AcceptEula = GetValueFromBoolean(acceptEula);

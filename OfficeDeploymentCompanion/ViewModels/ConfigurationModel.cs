@@ -11,31 +11,6 @@ namespace OfficeDeploymentCompanion.ViewModels
 {
     public class ConfigurationModel : ViewModelBase
     {
-        //public ConfigurationModel(
-        //    List<Language> availableLanguages,
-        //    List<Product> availableProducts,
-        //    IEnumerable<Language> addedLanguages,
-        //    IEnumerable<Product> excludedProducts)
-        //{
-        //    if (availableLanguages == null)
-        //        throw new ArgumentNullException(nameof(availableLanguages));
-
-        //    if (availableProducts == null)
-        //        throw new ArgumentNullException(nameof(availableProducts));
-
-        //    this.AvailableLanguages = availableLanguages;
-
-        //    this.AvailableProducts = availableProducts;
-
-        //    this.AddedLanguages = addedLanguages != null 
-        //        ? addedLanguages.ToObservableCollection() 
-        //        : new ObservableCollection<Language>();
-
-        //    this.ExcludedProducts = excludedProducts != null
-        //        ? excludedProducts.ToObservableCollection()
-        //        : new ObservableCollection<Product>();
-        //}
-
         private Language _selectedAvailableLanguage;
         private List<Language> _availableLanguages;
         private ObservableCollection<Language> _addedLanguages;
@@ -45,8 +20,9 @@ namespace OfficeDeploymentCompanion.ViewModels
         private bool _enableUpdates, _autoActivate, _forceAppShutdown, _pinIconsToTaskBar;
         private bool _sharedComputerLicensing, _silentMode, _acceptEula;
         private Channel _selectedChannel;
-        private OfficeClientEdition _selectedArchitecture;
-        private DisplayLevel _displayLevel;
+        private List<Channel> _availableChannels;
+        private OfficeClientEdition _selectedEdition;
+        private List<OfficeClientEdition> _availableEditions;
 
         public List<Language> AvailableLanguages
         {
@@ -150,22 +126,28 @@ namespace OfficeDeploymentCompanion.ViewModels
             set { Set(nameof(AcceptEula), ref _acceptEula, value); }
         }
 
-        public OfficeClientEdition SelectedArchitecture
-        {
-            get { return _selectedArchitecture; }
-            set { Set(nameof(SelectedArchitecture), ref _selectedArchitecture, value); }
-        }
-
         public Channel SelectedChannel
         {
             get { return _selectedChannel; }
             set { Set(nameof(SelectedChannel), ref _selectedChannel, value); }
         }
 
-        public DisplayLevel DisplayLevel
+        public List<Channel> AvailableChannels
         {
-            get { return _displayLevel; }
-            set { Set(nameof(DisplayLevel), ref _displayLevel, value); }
+            get { return _availableChannels; }
+            set { Set(nameof(AvailableChannels), ref _availableChannels, value); }
+        }
+
+        public OfficeClientEdition SelectedEdition
+        {
+            get { return _selectedEdition; }
+            set { Set(nameof(SelectedEdition), ref _selectedEdition, value); }
+        }
+
+        public List<OfficeClientEdition> AvailableEditions
+        {
+            get { return _availableEditions; }
+            set { Set(nameof(AvailableEditions), ref _availableEditions, value); }
         }
 
         public class Language

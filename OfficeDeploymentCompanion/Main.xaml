@@ -26,7 +26,15 @@
         </Grid.ColumnDefinitions>
 
         <Grid Grid.Row="0" 
-              Grid.Column="0">
+              Grid.Column="0"
+              Margin="12">
+            <StackPanel VerticalAlignment="Bottom">
+                <ComboBox ItemsSource="{Binding CurrentConfiguration.AvailableChannels}" 
+                          SelectedItem="{Binding CurrentConfiguration.SelectedChannel, Mode=TwoWay}" />
+
+                <ComboBox ItemsSource="{Binding CurrentConfiguration.AvailableEditions}" 
+                          SelectedItem="{Binding CurrentConfiguration.SelectedEdition, Mode=TwoWay}" />
+            </StackPanel>
         </Grid>
 
         <StackPanel Grid.Row="1"

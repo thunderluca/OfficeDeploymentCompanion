@@ -73,7 +73,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Extensions\LinqExtensions.cs" />
-    <Compile Include="Extensions\XmlWriterExtensions.cs" />
+    <Compile Include="Helpers\EnumHelper.cs" />
+    <Compile Include="Helpers\XmlWriterHelper.cs" />
     <Compile Include="Models\DisplayLevel.cs" />
     <Compile Include="Models\OfficeClientEdition.cs" />
     <Compile Include="Models\Extensions\OfficeClientEditionExtensions.cs" />

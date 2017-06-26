@@ -5,10 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
-namespace System.Xml
+namespace OfficeDeploymentCompanion.Helpers
 {
-    public static class XmlWriterExtensions
+    public static class XmlWriterHelper
     {
         public static void WriteOffice365ProPlusRetailProductElement(
             this XmlWriter xmlWriter, 

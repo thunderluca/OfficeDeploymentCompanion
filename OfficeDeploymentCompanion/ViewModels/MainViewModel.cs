@@ -29,7 +29,7 @@ namespace OfficeDeploymentCompanion.ViewModels
 
         public string Title
         {
-            get { return "Office Deployment Companion"; }
+            get { return "Office Deployment Tool Companion"; }
         }
 
         public ConfigurationModel CurrentConfiguration
