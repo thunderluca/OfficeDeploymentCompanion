@@ -125,12 +125,17 @@ namespace OfficeDeploymentCompanion.ViewModels
                     _installCommand = new RelayCommand(async () =>
                     {
                         if (string.IsNullOrWhiteSpace(this.SelectedFilePath)) return;
-
+                        
                         var officeFilesExist = this.WorkerServices.DidUserDownloadPackages(this.SelectedFilePath);
                         if (!officeFilesExist)
                             await DownloadFilesAsync();
+                        else
+                        {
+                            var checkResult = await this.WorkerServices.CheckRequirementsAsync(this.SelectedFilePath, this.CurrentConfiguration);
+                            if (!checkResult) return;
+                        }
 
-                        await this.WorkerServices.InstallAsync(this.SelectedFilePath, this.CurrentConfiguration);
+                        this.WorkerServices.Install(this.SelectedFilePath, this.CurrentConfiguration);
                     });
                 }
 
@@ -171,6 +176,9 @@ namespace OfficeDeploymentCompanion.ViewModels
         private async Task DownloadFilesAsync()
         {
             if (string.IsNullOrWhiteSpace(this.SelectedFilePath)) return;
+
+            var checkResult = await this.WorkerServices.CheckRequirementsAsync(this.SelectedFilePath, this.CurrentConfiguration);
+            if (!checkResult) return;
 
             var progressDialogController = await DialogCoordinator.ShowProgressAsync(
                                 context: this,

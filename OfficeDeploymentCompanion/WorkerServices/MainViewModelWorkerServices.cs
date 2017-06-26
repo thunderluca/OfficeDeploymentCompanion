@@ -250,16 +250,30 @@ namespace OfficeDeploymentCompanion.WorkerServices
             return products;
         }
 
-        public async Task DownloadAsync(string filePath, ConfigurationModel configuration)
+        public async Task<bool> CheckRequirementsAsync(string filePath, ConfigurationModel configuration)
         {
             try
             {
                 var continueOperation = await CheckConfigurationFileAsync(filePath, configuration);
-                if (!continueOperation) return;
+                if (!continueOperation) return false;
 
                 var folder = Path.GetDirectoryName(filePath);
 
-                CheckSetupFile(folder);
+                var result = CheckSetupFile(folder);
+                return result;
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show($"Error: {exception.Message}");
+                return false;
+            }
+        }
+
+        public async Task DownloadAsync(string filePath, ConfigurationModel configuration)
+        {
+            try
+            {
+                var folder = Path.GetDirectoryName(filePath);
 
                 var processStartInfo = new ProcessStartInfo
                 {
@@ -318,16 +332,11 @@ namespace OfficeDeploymentCompanion.WorkerServices
             return folders != null && folders.Count() > 0;
         }
 
-        public async Task InstallAsync(string filePath, ConfigurationModel configuration)
+        public void Install(string filePath, ConfigurationModel configuration)
         {
             try
             {
-                var continueOperation = await CheckConfigurationFileAsync(filePath, configuration);
-                if (!continueOperation) return;
-
                 var folder = Path.GetDirectoryName(filePath);
-
-                CheckSetupFile(folder);
 
                 var processStartInfo = new ProcessStartInfo
                 {
@@ -366,13 +375,20 @@ namespace OfficeDeploymentCompanion.WorkerServices
             return true;
         }
 
-        private void CheckSetupFile(string folder)
+        private bool CheckSetupFile(string folder)
         {
             var setupFilePath = Path.Combine(folder, Constants.DefaultSetupFileName);
-            if (!File.Exists(setupFilePath))
-            {
-                throw new FileNotFoundException("setup.exe not found in folder that contains configuration file");
-            }
+            if (File.Exists(setupFilePath)) return true;
+
+            var messageBoxResult = MessageBox.Show(
+                    messageBoxText: "Office Deployment Tool setup.exe doesn't exists in current configuration file path, do you want to download it?",
+                    caption: "Setup not found",
+                    button: MessageBoxButton.YesNo);
+
+            if (messageBoxResult == MessageBoxResult.Yes || messageBoxResult == MessageBoxResult.OK)
+                Process.Start(new ProcessStartInfo(Constants.OfficeDeploymentToolDownloadUrl));
+
+            return false;
         }
 
         public bool HasCurrentConfigurationUnsavedChanges(ConfigurationModel configuration)
