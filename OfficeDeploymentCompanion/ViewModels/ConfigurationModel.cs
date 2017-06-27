@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
 using OfficeDeploymentCompanion.Models;
+using OfficeDeploymentCompanion.Resources;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -205,5 +206,7 @@ namespace OfficeDeploymentCompanion.ViewModels
                 && this.SharedComputerLicensing.Equals(otherConfiguration.SharedComputerLicensing)
                 && this.SilentMode.Equals(otherConfiguration.SilentMode);
         }
+
+        public override int GetHashCode() => base.GetHashCode();
     }
 }

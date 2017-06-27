@@ -34,28 +34,31 @@ namespace OfficeDeploymentCompanion.WorkerServices
 
             var OSBitArchitecture = configuration.SelectedEdition.GetOSArchitecture();
 
-            using (var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.ReadWrite))
+            await Task.Run(() =>
             {
-                using (var xmlWriter = XmlWriter.Create(fileStream, xmlWriterSettings))
+                using (var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.ReadWrite))
                 {
-                    xmlWriter.WriteStartElement("Configuration");
-                    xmlWriter.WriteStartElement("Add");
-                    xmlWriter.WriteAttributeString("OfficeClientEdition", OSBitArchitecture.ToString());
-                    xmlWriter.WriteAttributeString("Channel", configuration.SelectedChannel.ToString("G"));
-                    xmlWriter.WriteOffice365ProPlusRetailProductElement(
-                        languages: configuration.AddedLanguages.Select(l => l.Id),
-                        excludedAppIds: configuration.ExcludedProducts.Select(p => p.Id));
-                    xmlWriter.WriteEndElement();
-                    xmlWriter.WriteUpdatesElement(configuration.EnableUpdates, configuration.SelectedChannel);
-                    xmlWriter.WriteDisplayElement(configuration.SilentMode, configuration.AcceptEula);
-                    xmlWriter.WritePropertyElement("AUTOACTIVATE", (configuration.AutoActivate.GetBitStringFromBoolean()));
-                    xmlWriter.WritePropertyElement("FORCEAPPSHUTDOWN", (configuration.ForceAppShutdown.GetBooleanStringFromBoolean()));
-                    xmlWriter.WritePropertyElement("PinIconsToTaskBar", (configuration.PinIconsToTaskBar.GetBooleanStringFromBoolean()));
-                    xmlWriter.WritePropertyElement("SharedComputerLicensing", (configuration.SharedComputerLicensing.GetBitStringFromBoolean()));
-                    xmlWriter.WriteEndElement();
-                    xmlWriter.Flush();
+                    using (var xmlWriter = XmlWriter.Create(fileStream, xmlWriterSettings))
+                    {
+                        xmlWriter.WriteStartElement("Configuration");
+                        xmlWriter.WriteStartElement("Add");
+                        xmlWriter.WriteAttributeString("OfficeClientEdition", OSBitArchitecture.ToString());
+                        xmlWriter.WriteAttributeString("Channel", configuration.SelectedChannel.ToString("G"));
+                        xmlWriter.WriteOffice365ProPlusRetailProductElement(
+                            languages: configuration.AddedLanguages.Select(l => l.Id),
+                            excludedAppIds: configuration.ExcludedProducts.Select(p => p.Id));
+                        xmlWriter.WriteEndElement();
+                        xmlWriter.WriteUpdatesElement(configuration.EnableUpdates, configuration.SelectedChannel);
+                        xmlWriter.WriteDisplayElement(configuration.SilentMode, configuration.AcceptEula);
+                        xmlWriter.WritePropertyElement("AUTOACTIVATE", (configuration.AutoActivate.GetBitStringFromBoolean()));
+                        xmlWriter.WritePropertyElement("FORCEAPPSHUTDOWN", (configuration.ForceAppShutdown.GetBooleanStringFromBoolean()));
+                        xmlWriter.WritePropertyElement("PinIconsToTaskBar", (configuration.PinIconsToTaskBar.GetBooleanStringFromBoolean()));
+                        xmlWriter.WritePropertyElement("SharedComputerLicensing", (configuration.SharedComputerLicensing.GetBitStringFromBoolean()));
+                        xmlWriter.WriteEndElement();
+                        xmlWriter.Flush();
+                    }
                 }
-            }
+            });
         }
 
         public ConfigurationModel InitializeConfiguration()
@@ -69,7 +72,7 @@ namespace OfficeDeploymentCompanion.WorkerServices
             return new ConfigurationModel(languages, products, channels, editions);
         }
 
-        public async Task<ConfigurationModel> LoadConfigurationAsync(string filePath)
+        public ConfigurationModel LoadConfiguration(string filePath)
         {
             var configurationModel = InitializeConfiguration();
 
@@ -273,26 +276,29 @@ namespace OfficeDeploymentCompanion.WorkerServices
         {
             try
             {
-                var folder = Path.GetDirectoryName(filePath);
-
-                var processStartInfo = new ProcessStartInfo
+                await Task.Run(() =>
                 {
-                    UseShellExecute = true,
-                    WorkingDirectory = folder,
-                    WindowStyle = ProcessWindowStyle.Hidden,
-                    FileName = Constants.DefaultSetupFileName,
-                    Arguments = $"/download \"{filePath}\""
-                };
+                    var folder = Path.GetDirectoryName(filePath);
 
-                DownloadProcess = new Process
-                {
-                    StartInfo = processStartInfo
-                };
+                    var processStartInfo = new ProcessStartInfo
+                    {
+                        UseShellExecute = true,
+                        WorkingDirectory = folder,
+                        WindowStyle = ProcessWindowStyle.Hidden,
+                        FileName = Constants.DefaultSetupFileName,
+                        Arguments = $"/download \"{filePath}\""
+                    };
 
-                DownloadProcess.Start();
-                DownloadProcess.WaitForExit();
+                    DownloadProcess = new Process
+                    {
+                        StartInfo = processStartInfo
+                    };
 
-                DownloadProcess = null;
+                    DownloadProcess.Start();
+                    DownloadProcess.WaitForExit();
+
+                    DownloadProcess = null;
+                });
             }
             catch (Exception exception)
             {

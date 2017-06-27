@@ -68,14 +68,14 @@ namespace OfficeDeploymentCompanion.ViewModels
             {
                 if (_loadCommand == null)
                 {
-                    _loadCommand = new RelayCommand(async () =>
+                    _loadCommand = new RelayCommand(() =>
                     {
                         var filePath = this.WorkerServices.GetConfigurationFilePath();
                         if (string.IsNullOrWhiteSpace(filePath)) return;
 
                         this.SelectedFilePath = filePath;
 
-                        var configuration = await this.WorkerServices.LoadConfigurationAsync(filePath);
+                        var configuration = this.WorkerServices.LoadConfiguration(filePath);
                         if (configuration != null)
                         {
                             this.CurrentConfiguration = configuration;
