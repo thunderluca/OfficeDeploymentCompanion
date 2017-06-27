@@ -33,7 +33,7 @@ namespace OfficeDeploymentCompanion.ViewModels
             this.SelectedFilePath = this.WorkerServices.GetDefaultFilePath();
         }
 
-        private bool _isBusy;
+        private bool _isBusy, _skipClosingPopup;
         private string _selectedFilePath;
         private ConfigurationModel _currentConfiguration;
         private RelayCommand _loadCommand, _saveCommand, _downloadCommand, _installCommand;
@@ -128,7 +128,10 @@ namespace OfficeDeploymentCompanion.ViewModels
                         
                         var officeFilesExist = this.WorkerServices.DidUserDownloadPackages(this.SelectedFilePath);
                         if (!officeFilesExist)
-                            await DownloadFilesAsync();
+                        {
+                            var downloadResult = await DownloadFilesAsync();
+                            if (!downloadResult) return;
+                        }
                         else
                         {
                             var checkResult = await this.WorkerServices.CheckRequirementsAsync(this.SelectedFilePath, this.CurrentConfiguration);
@@ -154,17 +157,18 @@ namespace OfficeDeploymentCompanion.ViewModels
                         var hasUnsavedChanges = this.WorkerServices.HasCurrentConfigurationUnsavedChanges(this.CurrentConfiguration);
                         if (hasUnsavedChanges)
                         {
-                            var messageBoxResult = MessageBox.Show(
-                                messageBoxText: "The current configuration is not saved, do you want to save it before exit?",
-                                caption: "Unsaved changes detected",
-                                button: MessageBoxButton.YesNo);
+                            args.Cancel = true;
+                            var result = await DialogCoordinator.ShowMessageAsync(
+                                context: this,
+                                title: "Unsaved changes detected",
+                                message: "The current configuration is not saved, do you want to save it before exit? (If you press Cancel, you will lost all unsaved changes.)",
+                                style: MessageDialogStyle.AffirmativeAndNegative);
 
-                            if (messageBoxResult == MessageBoxResult.Yes || messageBoxResult == MessageBoxResult.OK)
-                            {
+                            if (result == MessageDialogResult.Affirmative)
                                 await SaveConfigurationAsync();
 
-                                Application.Current.Shutdown();
-                            }
+                            _skipClosingPopup = true;
+                            Application.Current.Shutdown();
                         }
                     });
                 }
@@ -173,12 +177,12 @@ namespace OfficeDeploymentCompanion.ViewModels
             }
         }
 
-        private async Task DownloadFilesAsync()
+        private async Task<bool> DownloadFilesAsync()
         {
-            if (string.IsNullOrWhiteSpace(this.SelectedFilePath)) return;
+            if (string.IsNullOrWhiteSpace(this.SelectedFilePath)) return false;
 
             var checkResult = await this.WorkerServices.CheckRequirementsAsync(this.SelectedFilePath, this.CurrentConfiguration);
-            if (!checkResult) return;
+            if (!checkResult) return false;
 
             var progressDialogController = await DialogCoordinator.ShowProgressAsync(
                                 context: this,
@@ -192,6 +196,8 @@ namespace OfficeDeploymentCompanion.ViewModels
 
             progressDialogController.Canceled -= OnProgressDialogControllerCanceled;
             await progressDialogController.CloseAsync();
+
+            return true;
         }
 
         private void OnProgressDialogControllerCanceled(object sender, EventArgs e) => this.WorkerServices.CancelDownload();
@@ -206,11 +212,11 @@ namespace OfficeDeploymentCompanion.ViewModels
             try
             {
                 await this.WorkerServices.CreateConfigurationAsync(filePath, this.CurrentConfiguration);
-                MessageBox.Show("Configuration file successfully saved!");
+                await DialogCoordinator.ShowMessageAsync(context: this, title: "Operation completed", message: "Configuration file successfully saved!");
             }
             catch (Exception exception)
             {
-                MessageBox.Show($"Configuration file not saved! Error: {exception.Message}");
+                await DialogCoordinator.ShowMessageAsync(context: this, title: "Operation failed", message: $"Configuration file not saved! Error: {exception.Message}");
             }
         }
     }

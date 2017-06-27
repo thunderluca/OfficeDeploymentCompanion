@@ -1,4 +1,6 @@
-﻿using Microsoft.Win32;
+﻿using GalaSoft.MvvmLight.Ioc;
+using MahApps.Metro.Controls.Dialogs;
+using Microsoft.Win32;
 using OfficeDeploymentCompanion.Helpers;
 using OfficeDeploymentCompanion.Models;
 using OfficeDeploymentCompanion.Resources;
@@ -10,13 +12,22 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Xml;
 
 namespace OfficeDeploymentCompanion.WorkerServices
 {
     public class MainViewModelWorkerServices
     {
+        private readonly IDialogCoordinator DialogCoordinator;
+
+        public MainViewModelWorkerServices(IDialogCoordinator dialogCoordinator)
+        {
+            if (dialogCoordinator == null)
+                throw new ArgumentNullException(nameof(dialogCoordinator));
+
+            this.DialogCoordinator = dialogCoordinator;
+        }
+
         private static Process DownloadProcess { get; set; }
 
         public string GetDefaultFilePath() => Path.Combine(
@@ -267,7 +278,7 @@ namespace OfficeDeploymentCompanion.WorkerServices
             }
             catch (Exception exception)
             {
-                MessageBox.Show($"Error: {exception.Message}");
+                await DialogCoordinator.ShowMessageAsync(RetrieveDialogCoordinatorContext(), title: "Error", message: $"Error: {exception.Message}");
                 return false;
             }
         }
@@ -302,7 +313,7 @@ namespace OfficeDeploymentCompanion.WorkerServices
             }
             catch (Exception exception)
             {
-                MessageBox.Show($"Error: {exception.Message}");
+                await DialogCoordinator.ShowMessageAsync(RetrieveDialogCoordinatorContext(), title: "Error", message: $"Error: {exception.Message}");
             }
         }
 
@@ -361,22 +372,23 @@ namespace OfficeDeploymentCompanion.WorkerServices
             }
             catch (Exception exception)
             {
-                MessageBox.Show($"Error: {exception.Message}");
+                DialogCoordinator.ShowMessageAsync(RetrieveDialogCoordinatorContext(), title: "Error", message: $"Error: {exception.Message}");
             }
         }
 
         private async Task<bool> CheckConfigurationFileAsync(string filePath, ConfigurationModel configuration)
         {
-            if (!File.Exists(filePath))
-            {
-                var messageBoxResult = MessageBox.Show(
-                    messageBoxText: "No configuration saved found, do you want to create it with selected unsaved options?",
-                    caption: "Configuration not found", button: MessageBoxButton.YesNo);
+            if (File.Exists(filePath)) return true;
 
-                if (messageBoxResult != MessageBoxResult.Yes && messageBoxResult != MessageBoxResult.OK) return false;
+            var messageDialogResult = await DialogCoordinator.ShowMessageAsync(
+                RetrieveDialogCoordinatorContext(),
+                title: "Configuration not found",
+                message: "No configuration saved found, do you want to create it with selected unsaved options?",
+                style: MessageDialogStyle.AffirmativeAndNegative);
 
-                await this.CreateConfigurationAsync(filePath, configuration);
-            }
+            if (messageDialogResult != MessageDialogResult.Affirmative) return false;
+
+            await this.CreateConfigurationAsync(filePath, configuration);
 
             return true;
         }
@@ -386,13 +398,15 @@ namespace OfficeDeploymentCompanion.WorkerServices
             var setupFilePath = Path.Combine(folder, Constants.DefaultSetupFileName);
             if (File.Exists(setupFilePath)) return true;
 
-            var messageBoxResult = MessageBox.Show(
-                    messageBoxText: "Office Deployment Tool setup.exe doesn't exists in current configuration file path, do you want to download it?",
-                    caption: "Setup not found",
-                    button: MessageBoxButton.YesNo);
-
-            if (messageBoxResult == MessageBoxResult.Yes || messageBoxResult == MessageBoxResult.OK)
-                Process.Start(new ProcessStartInfo(Constants.OfficeDeploymentToolDownloadUrl));
+            DialogCoordinator.ShowMessageAsync(
+                RetrieveDialogCoordinatorContext(),
+                title: "Setup not found",
+                message: "Office Deployment Tool setup.exe doesn't exists in current configuration file path, do you want to download it?",
+                style: MessageDialogStyle.AffirmativeAndNegative).ContinueWith(task => 
+                {
+                    if (task.Result == MessageDialogResult.Affirmative)
+                        Process.Start(new ProcessStartInfo(Constants.OfficeDeploymentToolDownloadUrl));
+                });
 
             return false;
         }
@@ -403,5 +417,7 @@ namespace OfficeDeploymentCompanion.WorkerServices
 
             return !defaultConfiguration.Equals(configuration);
         }
+
+        private static object RetrieveDialogCoordinatorContext() => SimpleIoc.Default.GetInstance<MainViewModel>();
     }
 }

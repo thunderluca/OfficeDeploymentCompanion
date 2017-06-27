@@ -1,5 +1,4 @@
-﻿using GalaSoft.MvvmLight.Threading;
-using MahApps.Metro.Controls;
+﻿using MahApps.Metro.Controls;
 using OfficeDeploymentCompanion.ViewModels;
 using System.Linq;
 using System.Windows;

@@ -1,6 +1,5 @@
 ﻿using GalaSoft.MvvmLight;
 using OfficeDeploymentCompanion.Models;
-using OfficeDeploymentCompanion.Resources;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
