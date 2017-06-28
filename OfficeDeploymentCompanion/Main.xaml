@@ -194,22 +194,24 @@
         <StackPanel Grid.Row="1" 
                     Grid.Column="1"
                     Margin="12">
-            <TextBlock Text="Programs" 
-                       Padding="4"
-                       Foreground="White" />
-            <ComboBox ItemsSource="{Binding CurrentConfiguration.AvailableProducts}" 
-                      SelectedItem="{Binding CurrentConfiguration.SelectedProduct, Mode=TwoWay}"
-                      SelectionChanged="OnCommonComboBoxSelectionChanged">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Name}" 
-                                   Foreground="Black"
-                                   HorizontalAlignment="Stretch"
-                                   VerticalAlignment="Stretch"
-                                   TextAlignment="Left" />
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Programs to exclude"
+                           VerticalAlignment="Center"
+                           FontSize="16"
+                           Foreground="White" />
+                
+                <Button Content="Choose programs"
+                        FontSize="16"
+                        FontWeight="SemiBold"
+                        Foreground="White"
+                        BorderBrush="DarkGray"
+                        BorderThickness="2.5"
+                        Padding="20,10"
+                        Margin="12,0"
+                        HorizontalAlignment="Left"
+                        Command="{Binding ManageExcludedProductsCommand}"
+                        Style="{StaticResource AccentedSquareButtonStyle}" />
+            </StackPanel>
 
             <ListBox ItemsSource="{Binding CurrentConfiguration.ExcludedProducts, Mode=OneWay}"
                      Margin="0,12,0,0"
@@ -235,16 +237,6 @@
                                        Text="{Binding Name}" 
                                        Foreground="White"
                                        VerticalAlignment="Stretch" />
-                            <Button Grid.Column="1" 
-                                    Content="✖"
-                                    FontFamily="Segoe UI Symbol"
-                                    FontWeight="SemiBold"
-                                    Tag="{Binding Id}"
-                                    Foreground="{StaticResource AccentColorBrush}" 
-                                    BorderThickness="0"
-                                    Background="Transparent"
-                                    Click="OnExcludedProductButtonClick"
-                                    Style="{StaticResource DeleteButtonStyle}" />
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>

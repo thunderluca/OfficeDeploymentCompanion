@@ -1,0 +1,118 @@
+﻿<controls:MetroWindow x:Class="OfficeDeploymentCompanion.Views.ExcludedProducts"
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                      mc:Ignorable="d"
+                      Title="Office programs to exclude"
+                      ShowIconOnTitleBar="False"
+                      ShowMinButton="False"
+                      ShowMaxRestoreButton="False"
+                      BorderBrush="{StaticResource AccentColorBrush}"
+                      Background="{StaticResource DarkGrayVS}"
+                      WindowTitleBrush="{StaticResource AccentColorBrush}"
+                      GlowBrush="Black"
+                      WindowStartupLocation="CenterScreen"
+                      ResizeMode="NoResize"
+                      Width="300"
+                      Height="400">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0"
+                    Margin="12">
+            <TextBlock Text="Programs" 
+                       Padding="4"
+                       Foreground="White" />
+            <ComboBox x:Name="ProductsComboBox"
+                      ItemsSource="{Binding AvailableProducts}" 
+                      SelectedItem="{Binding SelectedProduct, Mode=TwoWay}"
+                      SelectionChanged="OnCommonComboBoxSelectionChanged">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}" 
+                                   Foreground="Black"
+                                   HorizontalAlignment="Stretch"
+                                   VerticalAlignment="Stretch"
+                                   TextAlignment="Left" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+            <ListBox ItemsSource="{Binding ExcludedProducts, Mode=OneWay}"
+                     Margin="0,12,0,0"
+                     SelectionMode="Single"
+                     Background="Transparent"
+                     Visibility="{Binding ExcludedProducts.Count, Converter={StaticResource CountToVisibilityConverter}}">
+                <ListBox.Resources>
+                    <Style TargetType="{x:Type ListBoxItem}">
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="Margin" Value="0" />
+                    </Style>
+                </ListBox.Resources>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0"
+                                       FontSize="14"
+                                       Text="{Binding Name}" 
+                                       Foreground="White"
+                                       VerticalAlignment="Stretch" />
+                            <Button Grid.Column="1" 
+                                    Content="✖"
+                                    FontFamily="Segoe UI Symbol"
+                                    FontWeight="SemiBold"
+                                    Tag="{Binding Id}"
+                                    Foreground="{StaticResource AccentColorBrush}" 
+                                    BorderThickness="0"
+                                    Background="Transparent"
+                                    Click="OnExcludedProductButtonClick"
+                                    Style="{StaticResource DeleteButtonStyle}" />
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <TextBlock Text="No products excluded" 
+                       FontSize="14"
+                       Foreground="White"
+                       Padding="4"
+                       Visibility="{Binding ExcludedProducts.Count, Converter={StaticResource CountToOppositeVisibilityConverter}}" />
+        </StackPanel>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0" 
+                    Content="Cancel"
+                    FontWeight="SemiBold"
+                    Foreground="White"
+                    BorderBrush="DarkGray"
+                    BorderThickness="2.5"
+                    Margin="12"
+                    Click="OnCancelClick"
+                    Style="{StaticResource AccentedSquareButtonStyle}" />
+
+            <Button Grid.Column="1" 
+                    Content="Confirm"
+                    FontWeight="SemiBold"
+                    Foreground="White"
+                    BorderBrush="DarkGray"
+                    BorderThickness="2.5"
+                    Margin="12"
+                    Click="OnConfirmClick"
+                    Style="{StaticResource AccentedSquareButtonStyle}" />
+        </Grid>
+    </Grid>
+</controls:MetroWindow>

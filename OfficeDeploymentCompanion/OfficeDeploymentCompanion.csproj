@@ -80,6 +80,8 @@
     <Compile Include="Helpers\EnumHelper.cs" />
     <Compile Include="Helpers\ValuesHelper.cs" />
     <Compile Include="Helpers\XmlWriterHelper.cs" />
+    <Compile Include="Messages\AddedLanguagesMessage.cs" />
+    <Compile Include="Messages\ExcludedProductsMessage.cs" />
     <Compile Include="Models\DisplayLevel.cs" />
     <Compile Include="Models\OfficeClientEdition.cs" />
     <Compile Include="Models\Extensions\OfficeClientEditionExtensions.cs" />
@@ -89,9 +91,14 @@
     <Compile Include="Models\Products.cs" />
     <Compile Include="Resources\Constants.cs" />
     <Compile Include="ViewModels\ConfigurationModel.cs" />
+    <Compile Include="ViewModels\ExcludedProductsViewModel.cs" />
     <Compile Include="ViewModels\Extensions\ConfigurationModelExtensions.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
+    <Compile Include="Views\ExcludedProducts.xaml.cs">
+      <DependentUpon>ExcludedProducts.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WorkerServices\ExcludedProductsViewModelWorkerServices.cs" />
     <Compile Include="WorkerServices\MainViewModelWorkerServices.cs" />
     <Page Include="Main.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -106,6 +113,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Resources\OfficeAccent.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ExcludedProducts.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

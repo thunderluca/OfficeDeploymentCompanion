@@ -1,6 +1,9 @@
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 using MahApps.Metro.Controls.Dialogs;
+using OfficeDeploymentCompanion.Messages;
+using OfficeDeploymentCompanion.Views;
 using OfficeDeploymentCompanion.WorkerServices;
 using System;
 using System.Collections.Generic;
@@ -13,30 +16,42 @@ namespace OfficeDeploymentCompanion.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
-        private readonly MainViewModelWorkerServices WorkerServices;
+        private readonly MainViewModelWorkerServices MainWorkerServices;
+        private readonly ExcludedProductsViewModelWorkerServices ExcludedProductsWorkerServices;
         private readonly IDialogCoordinator DialogCoordinator;
 
-        public MainViewModel(MainViewModelWorkerServices workerServices, IDialogCoordinator dialogCoordinator)
+        public MainViewModel(
+            MainViewModelWorkerServices mainWorkerServices, 
+            ExcludedProductsViewModelWorkerServices excludedProductsWorkerServices,
+            IDialogCoordinator dialogCoordinator)
         {
-            if (workerServices == null)
-                throw new ArgumentNullException(nameof(workerServices));
+            if (mainWorkerServices == null)
+                throw new ArgumentNullException(nameof(mainWorkerServices));
+
+            if (excludedProductsWorkerServices == null)
+                throw new ArgumentNullException(nameof(excludedProductsWorkerServices));
 
             if (dialogCoordinator == null)
                 throw new ArgumentNullException(nameof(dialogCoordinator));
 
-            this.WorkerServices = workerServices;
+            this.MainWorkerServices = mainWorkerServices;
+            this.ExcludedProductsWorkerServices = excludedProductsWorkerServices;
             this.DialogCoordinator = dialogCoordinator;
 
             if (this.CurrentConfiguration == null)
-                this.CurrentConfiguration = this.WorkerServices.InitializeConfiguration();
+                this.CurrentConfiguration = this.MainWorkerServices.InitializeConfiguration();
 
-            this.SelectedFilePath = this.WorkerServices.GetDefaultFilePath();
+            this.SelectedFilePath = this.MainWorkerServices.GetDefaultFilePath();
+
+            Messenger.Default.Register<ExcludedProductsMessage>(this, ManageExcludedProductsMessage);
+            Messenger.Default.Register<AddedLanguagesMessage>(this, ManageAddedLanguagesMessage);
         }
 
-        private bool _isBusy, _skipClosingPopup;
+        private bool _isBusy;
         private string _selectedFilePath;
         private ConfigurationModel _currentConfiguration;
         private RelayCommand _loadCommand, _saveCommand, _downloadCommand, _installCommand;
+        private RelayCommand _manageExcludedProductsCommand;
         private RelayCommand<CancelEventArgs> _windowClosingCommand;
 
         public string Title
@@ -70,12 +85,12 @@ namespace OfficeDeploymentCompanion.ViewModels
                 {
                     _loadCommand = new RelayCommand(() =>
                     {
-                        var filePath = this.WorkerServices.GetConfigurationFilePath();
+                        var filePath = this.MainWorkerServices.GetConfigurationFilePath();
                         if (string.IsNullOrWhiteSpace(filePath)) return;
 
                         this.SelectedFilePath = filePath;
 
-                        var configuration = this.WorkerServices.LoadConfiguration(filePath);
+                        var configuration = this.MainWorkerServices.LoadConfiguration(filePath);
                         if (configuration != null)
                         {
                             this.CurrentConfiguration = configuration;
@@ -126,7 +141,7 @@ namespace OfficeDeploymentCompanion.ViewModels
                     {
                         if (string.IsNullOrWhiteSpace(this.SelectedFilePath)) return;
                         
-                        var officeFilesExist = this.WorkerServices.DidUserDownloadPackages(this.SelectedFilePath);
+                        var officeFilesExist = this.MainWorkerServices.DidUserDownloadPackages(this.SelectedFilePath);
                         if (!officeFilesExist)
                         {
                             var downloadResult = await DownloadFilesAsync();
@@ -134,15 +149,36 @@ namespace OfficeDeploymentCompanion.ViewModels
                         }
                         else
                         {
-                            var checkResult = await this.WorkerServices.CheckRequirementsAsync(this.SelectedFilePath, this.CurrentConfiguration);
+                            var checkResult = await this.MainWorkerServices.CheckRequirementsAsync(this.SelectedFilePath, this.CurrentConfiguration);
                             if (!checkResult) return;
                         }
 
-                        this.WorkerServices.Install(this.SelectedFilePath, this.CurrentConfiguration);
+                        this.MainWorkerServices.Install(this.SelectedFilePath, this.CurrentConfiguration);
                     });
                 }
 
                 return _installCommand;
+            }
+        }
+
+        public RelayCommand ManageExcludedProductsCommand
+        {
+            get
+            {
+                if (_manageExcludedProductsCommand == null)
+                {
+                    _manageExcludedProductsCommand = new RelayCommand(() =>
+                    {
+                        var excludedProductsIds = this.CurrentConfiguration.ExcludedProducts.Select(ep => ep.Id).ToArray();
+
+                        var model = this.ExcludedProductsWorkerServices.GetExcludedProductsViewModel(excludedProductsIds);
+
+                        var excludedProductsWindow = new ExcludedProducts(model);
+                        excludedProductsWindow.Show();
+                    });
+                }
+
+                return _manageExcludedProductsCommand;
             }
         }
 
@@ -154,7 +190,7 @@ namespace OfficeDeploymentCompanion.ViewModels
                 {
                     _windowClosingCommand = new RelayCommand<CancelEventArgs>(async args =>
                     {
-                        var hasUnsavedChanges = this.WorkerServices.HasCurrentConfigurationUnsavedChanges(this.CurrentConfiguration);
+                        var hasUnsavedChanges = this.MainWorkerServices.HasCurrentConfigurationUnsavedChanges(this.CurrentConfiguration);
                         if (hasUnsavedChanges)
                         {
                             args.Cancel = true;
@@ -166,8 +202,7 @@ namespace OfficeDeploymentCompanion.ViewModels
 
                             if (result == MessageDialogResult.Affirmative)
                                 await SaveConfigurationAsync();
-
-                            _skipClosingPopup = true;
+                            
                             Application.Current.Shutdown();
                         }
                     });
@@ -181,7 +216,7 @@ namespace OfficeDeploymentCompanion.ViewModels
         {
             if (string.IsNullOrWhiteSpace(this.SelectedFilePath)) return false;
 
-            var checkResult = await this.WorkerServices.CheckRequirementsAsync(this.SelectedFilePath, this.CurrentConfiguration);
+            var checkResult = await this.MainWorkerServices.CheckRequirementsAsync(this.SelectedFilePath, this.CurrentConfiguration);
             if (!checkResult) return false;
 
             var progressDialogController = await DialogCoordinator.ShowProgressAsync(
@@ -192,7 +227,7 @@ namespace OfficeDeploymentCompanion.ViewModels
             progressDialogController.SetIndeterminate();
             progressDialogController.Canceled += OnProgressDialogControllerCanceled;
 
-            await this.WorkerServices.DownloadAsync(this.SelectedFilePath, this.CurrentConfiguration);
+            await this.MainWorkerServices.DownloadAsync(this.SelectedFilePath, this.CurrentConfiguration);
 
             progressDialogController.Canceled -= OnProgressDialogControllerCanceled;
             await progressDialogController.CloseAsync();
@@ -200,24 +235,54 @@ namespace OfficeDeploymentCompanion.ViewModels
             return true;
         }
 
-        private void OnProgressDialogControllerCanceled(object sender, EventArgs e) => this.WorkerServices.CancelDownload();
+        private void OnProgressDialogControllerCanceled(object sender, EventArgs e) => this.MainWorkerServices.CancelDownload();
 
         private async Task SaveConfigurationAsync()
         {
-            var filePath = this.WorkerServices.SaveConfigurationFilePath();
+            var filePath = this.MainWorkerServices.SaveConfigurationFilePath();
             if (string.IsNullOrWhiteSpace(filePath)) return;
 
             this.SelectedFilePath = filePath;
 
             try
             {
-                await this.WorkerServices.CreateConfigurationAsync(filePath, this.CurrentConfiguration);
+                await this.MainWorkerServices.CreateConfigurationAsync(filePath, this.CurrentConfiguration);
                 await DialogCoordinator.ShowMessageAsync(context: this, title: "Operation completed", message: "Configuration file successfully saved!");
             }
             catch (Exception exception)
             {
                 await DialogCoordinator.ShowMessageAsync(context: this, title: "Operation failed", message: $"Configuration file not saved! Error: {exception.Message}");
             }
+        }
+
+        private void ManageExcludedProductsMessage(ExcludedProductsMessage message)
+        {
+            this.CurrentConfiguration.ExcludedProducts.Clear();
+
+            if (message.ProductsIds.Length == 0) return;
+
+            var excludedProducts = this.CurrentConfiguration.AvailableProducts
+                .Where(l => message.ProductsIds.Any(id => id == l.Id))
+                .OrderBy(l => l.Name)
+                .ToArray();
+
+            foreach (var product in excludedProducts)
+                this.CurrentConfiguration.ExcludedProducts.Add(product);
+        }
+
+        private void ManageAddedLanguagesMessage(AddedLanguagesMessage message)
+        {
+            this.CurrentConfiguration.AddedLanguages.Clear();
+
+            if (message.LanguagesIds.Length == 0) return;
+
+            var addedLanguages = this.CurrentConfiguration.AvailableLanguages
+                .Where(l => message.LanguagesIds.Any(id => id == l.Id))
+                .OrderBy(l => l.Name)
+                .ToArray();
+
+            foreach (var language in addedLanguages)
+                this.CurrentConfiguration.AddedLanguages.Add(language);
         }
     }
 }
