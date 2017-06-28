@@ -8,14 +8,14 @@ using System.Windows.Controls;
 
 namespace OfficeDeploymentCompanion.Views
 {
-    public partial class ExcludedProducts : MetroWindow
+    public partial class ExcludedProductsWindow : MetroWindow
     {
         private ExcludedProductsViewModel ViewModel
         {
             get { return DataContext as ExcludedProductsViewModel; }
         }
 
-        public ExcludedProducts(ExcludedProductsViewModel viewModel)
+        public ExcludedProductsWindow(ExcludedProductsViewModel viewModel)
         {
             InitializeComponent();
             this.DataContext = viewModel;
@@ -45,7 +45,7 @@ namespace OfficeDeploymentCompanion.Views
             var id = (sender as Button).Tag.ToString();
             if (string.IsNullOrWhiteSpace(id)) return;
 
-            var productToReInclude = ViewModel.ExcludedProducts.SingleOrDefault(l => l.Id == id);
+            var productToReInclude = ViewModel.ExcludedProducts.SingleOrDefault(p => p.Id == id);
             if (productToReInclude != null)
                 ViewModel.ExcludedProducts.Remove(productToReInclude);
         }

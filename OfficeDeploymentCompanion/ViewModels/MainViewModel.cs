@@ -17,16 +17,21 @@ namespace OfficeDeploymentCompanion.ViewModels
     public class MainViewModel : ViewModelBase
     {
         private readonly MainViewModelWorkerServices MainWorkerServices;
+        private readonly AddedLanguagesViewModelWorkerServices AddedLanguagesWorkerServices;
         private readonly ExcludedProductsViewModelWorkerServices ExcludedProductsWorkerServices;
         private readonly IDialogCoordinator DialogCoordinator;
 
         public MainViewModel(
-            MainViewModelWorkerServices mainWorkerServices, 
+            MainViewModelWorkerServices mainWorkerServices,
+            AddedLanguagesViewModelWorkerServices addedLanguagesWorkerServices,
             ExcludedProductsViewModelWorkerServices excludedProductsWorkerServices,
             IDialogCoordinator dialogCoordinator)
         {
             if (mainWorkerServices == null)
                 throw new ArgumentNullException(nameof(mainWorkerServices));
+
+            if (addedLanguagesWorkerServices == null)
+                throw new ArgumentNullException(nameof(addedLanguagesWorkerServices));
 
             if (excludedProductsWorkerServices == null)
                 throw new ArgumentNullException(nameof(excludedProductsWorkerServices));
@@ -35,6 +40,7 @@ namespace OfficeDeploymentCompanion.ViewModels
                 throw new ArgumentNullException(nameof(dialogCoordinator));
 
             this.MainWorkerServices = mainWorkerServices;
+            this.AddedLanguagesWorkerServices = addedLanguagesWorkerServices;
             this.ExcludedProductsWorkerServices = excludedProductsWorkerServices;
             this.DialogCoordinator = dialogCoordinator;
 
@@ -51,7 +57,7 @@ namespace OfficeDeploymentCompanion.ViewModels
         private string _selectedFilePath;
         private ConfigurationModel _currentConfiguration;
         private RelayCommand _loadCommand, _saveCommand, _downloadCommand, _installCommand;
-        private RelayCommand _manageExcludedProductsCommand;
+        private RelayCommand _manageAddedLanguagesCommand, _manageExcludedProductsCommand;
         private RelayCommand<CancelEventArgs> _windowClosingCommand;
 
         public string Title
@@ -161,6 +167,27 @@ namespace OfficeDeploymentCompanion.ViewModels
             }
         }
 
+        public RelayCommand ManageAddedLanguagesCommand
+        {
+            get
+            {
+                if (_manageAddedLanguagesCommand == null)
+                {
+                    _manageAddedLanguagesCommand = new RelayCommand(() =>
+                    {
+                        var addedLanguagesIds = this.CurrentConfiguration.AddedLanguages.Select(al => al.Id).ToArray();
+
+                        var model = this.AddedLanguagesWorkerServices.GetAddedLanguagesViewModel(addedLanguagesIds);
+
+                        var excludedProductsWindow = new AddedLanguagesWindow(model);
+                        excludedProductsWindow.Show();
+                    });
+                }
+
+                return _manageAddedLanguagesCommand;
+            }
+        }
+
         public RelayCommand ManageExcludedProductsCommand
         {
             get
@@ -173,7 +200,7 @@ namespace OfficeDeploymentCompanion.ViewModels
 
                         var model = this.ExcludedProductsWorkerServices.GetExcludedProductsViewModel(excludedProductsIds);
 
-                        var excludedProductsWindow = new ExcludedProducts(model);
+                        var excludedProductsWindow = new ExcludedProductsWindow(model);
                         excludedProductsWindow.Show();
                     });
                 }

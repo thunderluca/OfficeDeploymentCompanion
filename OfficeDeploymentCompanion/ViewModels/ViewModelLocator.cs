@@ -12,6 +12,7 @@ namespace OfficeDeploymentCompanion.ViewModels
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
             SimpleIoc.Default.Register<MainViewModelWorkerServices>();
+            SimpleIoc.Default.Register<AddedLanguagesViewModelWorkerServices>();
             SimpleIoc.Default.Register<ExcludedProductsViewModelWorkerServices>();
             SimpleIoc.Default.Register<IDialogCoordinator>(() => DialogCoordinator.Instance);
 

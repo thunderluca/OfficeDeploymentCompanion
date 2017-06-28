@@ -90,14 +90,19 @@
     <Compile Include="Models\O365ProPlusSettings.cs" />
     <Compile Include="Models\Products.cs" />
     <Compile Include="Resources\Constants.cs" />
+    <Compile Include="ViewModels\AddedLanguagesViewModel.cs" />
     <Compile Include="ViewModels\ConfigurationModel.cs" />
     <Compile Include="ViewModels\ExcludedProductsViewModel.cs" />
     <Compile Include="ViewModels\Extensions\ConfigurationModelExtensions.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
-    <Compile Include="Views\ExcludedProducts.xaml.cs">
-      <DependentUpon>ExcludedProducts.xaml</DependentUpon>
+    <Compile Include="Views\AddedLanguagesWindow.xaml.cs">
+      <DependentUpon>AddedLanguagesWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ExcludedProductsWindow.xaml.cs">
+      <DependentUpon>ExcludedProductsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WorkerServices\AddedLanguagesViewModelWorkerServices.cs" />
     <Compile Include="WorkerServices\ExcludedProductsViewModelWorkerServices.cs" />
     <Compile Include="WorkerServices\MainViewModelWorkerServices.cs" />
     <Page Include="Main.xaml">
@@ -116,7 +121,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ExcludedProducts.xaml">
+    <Page Include="Views\AddedLanguagesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ExcludedProductsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
