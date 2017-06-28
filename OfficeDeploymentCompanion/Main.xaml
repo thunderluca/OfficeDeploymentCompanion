@@ -17,7 +17,7 @@
                       WindowTitleBrush="{StaticResource AccentColorBrush}"
                       GlowBrush="Black"
                       WindowStartupLocation="CenterScreen"
-                      ResizeMode="NoResize"
+                      ResizeMode="CanMinimize"
                       Width="800"
                       Height="600">
     <controls:MetroWindow.IconTemplate>

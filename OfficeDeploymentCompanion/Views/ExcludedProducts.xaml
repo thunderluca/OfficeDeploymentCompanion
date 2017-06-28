@@ -7,8 +7,6 @@
                       mc:Ignorable="d"
                       Title="Office programs to exclude"
                       ShowIconOnTitleBar="False"
-                      ShowMinButton="False"
-                      ShowMaxRestoreButton="False"
                       BorderBrush="{StaticResource AccentColorBrush}"
                       Background="{StaticResource DarkGrayVS}"
                       WindowTitleBrush="{StaticResource AccentColorBrush}"
