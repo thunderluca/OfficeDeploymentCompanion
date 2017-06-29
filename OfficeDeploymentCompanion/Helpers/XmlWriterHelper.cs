@@ -107,5 +107,14 @@ namespace OfficeDeploymentCompanion.Helpers
             xmlWriter.WriteAttributeString("Value", value);
             xmlWriter.WriteEndElement();
         }
+
+        public static void WriteRemoveElement(this XmlWriter xmlWriter, bool removePreviousOfficeInstallations)
+        {
+            if (!removePreviousOfficeInstallations) return;
+
+            xmlWriter.WriteStartElement("Remove");
+            xmlWriter.WriteAttributeString("All", true.GetBooleanStringFromBoolean());
+            xmlWriter.WriteFullEndElement();
+        }
     }
 }

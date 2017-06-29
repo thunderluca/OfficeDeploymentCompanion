@@ -53,12 +53,21 @@ namespace OfficeDeploymentCompanion.WorkerServices
                     {
                         xmlWriter.WriteStartElement("Configuration");
                         xmlWriter.WriteStartElement("Add");
+                        if (configuration.UseCustomSourcePath && !string.IsNullOrWhiteSpace(configuration.SourcePath))
+                            xmlWriter.WriteAttributeString("SourcePath", configuration.SourcePath);
+                        if (!string.IsNullOrWhiteSpace(configuration.Version))
+                            xmlWriter.WriteAttributeString("Version", configuration.Version);
                         xmlWriter.WriteAttributeString("OfficeClientEdition", OSBitArchitecture.ToString());
                         xmlWriter.WriteAttributeString("Channel", configuration.SelectedChannel.ToString("G"));
+                        if (configuration.UseCustomDownloadPath && !string.IsNullOrWhiteSpace(configuration.DownloadPath))
+                            xmlWriter.WriteAttributeString("DownloadPath", configuration.DownloadPath);
+                        if (configuration.ForceUpgradeFromOffice2013)
+                            xmlWriter.WriteAttributeString("ForceUpgrade", true.GetBooleanStringFromBoolean());
                         xmlWriter.WriteOffice365ProPlusRetailProductElement(
                             languages: configuration.AddedLanguages.Select(l => l.Id),
                             excludedAppIds: configuration.ExcludedProducts.Select(p => p.Id));
                         xmlWriter.WriteEndElement();
+                        xmlWriter.WriteRemoveElement(configuration.RemovePreviousOfficeInstallations);
                         xmlWriter.WriteUpdatesElement(configuration.EnableUpdates, configuration.SelectedChannel);
                         xmlWriter.WriteDisplayElement(configuration.SilentMode, configuration.AcceptEula);
                         xmlWriter.WritePropertyElement("AUTOACTIVATE", (configuration.AutoActivate.GetBitStringFromBoolean()));
@@ -94,9 +103,6 @@ namespace OfficeDeploymentCompanion.WorkerServices
 
                         switch (xmlReader.Name)
                         {
-                            case "Configuration":
-                            case "Product":
-                                break;
                             case "Add":
                                 {
                                     var officeClientEdition = xmlReader.GetAttribute("OfficeClientEdition");
@@ -178,6 +184,12 @@ namespace OfficeDeploymentCompanion.WorkerServices
                                                 break;
                                             }
                                     }
+                                    break;
+                                }
+                            case "Remove":
+                                {
+                                    var removeAll = xmlReader.GetAttribute("All");
+                                    configurationModel.RemovePreviousOfficeInstallations = removeAll.GetValueFromBoolean();
                                     break;
                                 }
                         }

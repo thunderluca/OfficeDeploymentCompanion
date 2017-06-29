@@ -37,7 +37,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
@@ -84,12 +84,18 @@
                            Foreground="White" />
                 <ComboBox ItemsSource="{Binding CurrentConfiguration.AvailableChannels}" 
                           SelectedItem="{Binding CurrentConfiguration.SelectedChannel, Mode=TwoWay}" />
-                <TextBlock Text="Office Edition" 
+                <TextBlock Text="Edition" 
                            Padding="4"
                            Foreground="White"
                            Margin="0,12,0,0" />
                 <ComboBox ItemsSource="{Binding CurrentConfiguration.AvailableEditions}" 
                           SelectedItem="{Binding CurrentConfiguration.SelectedEdition, Mode=TwoWay}" />
+                
+                <TextBlock Text="Version" 
+                           Padding="4"
+                           Foreground="White"
+                           Margin="0,12,0,0" />
+                <TextBox Text="{Binding Version, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
         </Grid>
 
@@ -100,42 +106,47 @@
                       IsChecked="{Binding CurrentConfiguration.EnableUpdates, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                       Foreground="White"
                       FontSize="16" />
+            <CheckBox Content="Force upgrade from Office 2013" 
+                      IsChecked="{Binding CurrentConfiguration.ForceUpgradeFromOffice2013, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      Foreground="White"
+                      FontSize="16"
+                      Margin="0,8" />
             <CheckBox Content="Auto activate Office" 
                       IsChecked="{Binding CurrentConfiguration.AutoActivate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                       Foreground="White"
-                      FontSize="16" 
-                      Margin="0,8" />
+                      FontSize="16" />
             <CheckBox Content="Force apps shutdown to install" 
                       IsChecked="{Binding CurrentConfiguration.ForceAppShutdown, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                       Foreground="White"
-                      FontSize="16" />
+                      FontSize="16" 
+                      Margin="0,8" />
             <CheckBox Content="Pin icons to taskbar (if supported)" 
                       IsChecked="{Binding CurrentConfiguration.PinIconsToTaskBar, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                       Foreground="White"
-                      FontSize="16" 
-                      Margin="0,8" />
+                      FontSize="16" />
             <CheckBox Content="Silent mode (no UI)" 
                       IsChecked="{Binding CurrentConfiguration.SilentMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                       Foreground="White"
-                      FontSize="16" />
+                      FontSize="16" 
+                      Margin="0,8" />
             <CheckBox Content="Accept EULA" 
                       IsChecked="{Binding CurrentConfiguration.AcceptEula, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                       Foreground="White"
-                      FontSize="16" 
-                      Margin="0,8" />
+                      FontSize="16" />
         </StackPanel>
 
-        <StackPanel Grid.Row="0"
-                    Grid.RowSpan="2"
-                    Grid.Column="1"
-                    Margin="12">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Languages to include"
+        <ScrollViewer Grid.Row="0"
+                      Grid.RowSpan="2"
+                      Grid.Column="1"
+                      Margin="12">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Languages to include"
                            VerticalAlignment="Center"
                            FontSize="16"
                            Foreground="White" />
 
-                <Button Content="Choose languages"
+                    <Button Content="Choose languages"
                         FontSize="16"
                         FontWeight="SemiBold"
                         Foreground="White"
@@ -146,51 +157,51 @@
                         HorizontalAlignment="Left"
                         Command="{Binding ManageAddedLanguagesCommand}"
                         Style="{StaticResource AccentedSquareButtonStyle}" />
-            </StackPanel>
+                </StackPanel>
 
-            <ListBox ItemsSource="{Binding CurrentConfiguration.AddedLanguages, Mode=OneWay}"
+                <ListBox ItemsSource="{Binding CurrentConfiguration.AddedLanguages, Mode=OneWay}"
                      Margin="0,12,0,0"
                      SelectionMode="Single"
                      Background="Transparent"
                      Visibility="{Binding CurrentConfiguration.AddedLanguages.Count, Converter={StaticResource CountToVisibilityConverter}}">
-                <ListBox.Resources>
-                    <Style TargetType="{x:Type ListBoxItem}">
-                        <Setter Property="Background" Value="Transparent" />
-                        <Setter Property="Margin" Value="0" />
-                    </Style>
-                </ListBox.Resources>
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
+                    <ListBox.Resources>
+                        <Style TargetType="{x:Type ListBoxItem}">
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="Margin" Value="0" />
+                        </Style>
+                    </ListBox.Resources>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
 
-                            <TextBlock Grid.Column="0"
+                                <TextBlock Grid.Column="0"
                                        FontSize="14"
                                        Text="{Binding Name}" 
                                        Foreground="White"
                                        VerticalAlignment="Stretch" />
-                        </Grid>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
 
-            <TextBlock Text="No languages added" 
+                <TextBlock Text="No languages added" 
                        FontSize="14"
                        Foreground="White"
                        Padding="4"
                        Visibility="{Binding CurrentConfiguration.AddedLanguages.Count, Converter={StaticResource CountToOppositeVisibilityConverter}}" />
 
-            <StackPanel Orientation="Horizontal"
+                <StackPanel Orientation="Horizontal"
                         Margin="0,24,0,0">
-                <TextBlock Text="Programs to exclude"
+                    <TextBlock Text="Programs to exclude"
                            VerticalAlignment="Center"
                            FontSize="16"
                            Foreground="White" />
 
-                <Button Content="Choose programs"
+                    <Button Content="Choose programs"
                         FontSize="16"
                         FontWeight="SemiBold"
                         Foreground="White"
@@ -201,42 +212,73 @@
                         HorizontalAlignment="Left"
                         Command="{Binding ManageExcludedProductsCommand}"
                         Style="{StaticResource AccentedSquareButtonStyle}" />
-            </StackPanel>
+                </StackPanel>
 
-            <ListBox ItemsSource="{Binding CurrentConfiguration.ExcludedProducts, Mode=OneWay}"
+                <ListBox ItemsSource="{Binding CurrentConfiguration.ExcludedProducts, Mode=OneWay}"
                      Margin="0,12,0,0"
                      SelectionMode="Single"
                      Background="Transparent"
                      Visibility="{Binding CurrentConfiguration.ExcludedProducts.Count, Converter={StaticResource CountToVisibilityConverter}}">
-                <ListBox.Resources>
-                    <Style TargetType="{x:Type ListBoxItem}">
-                        <Setter Property="Background" Value="Transparent" />
-                        <Setter Property="Margin" Value="0" />
-                    </Style>
-                </ListBox.Resources>
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
+                    <ListBox.Resources>
+                        <Style TargetType="{x:Type ListBoxItem}">
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="Margin" Value="0" />
+                        </Style>
+                    </ListBox.Resources>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
 
-                            <TextBlock Grid.Column="0"
+                                <TextBlock Grid.Column="0"
                                        FontSize="14"
                                        Text="{Binding Name}" 
                                        Foreground="White"
                                        VerticalAlignment="Stretch" />
-                        </Grid>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-            <TextBlock Text="No products excluded" 
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <TextBlock Text="No products excluded" 
                        FontSize="14"
                        Foreground="White"
                        Padding="4"
                        Visibility="{Binding CurrentConfiguration.ExcludedProducts.Count, Converter={StaticResource CountToOppositeVisibilityConverter}}" />
-        </StackPanel>
+
+                <CheckBox IsChecked="{Binding CurrentConfiguration.RemovePreviousOfficeInstallations, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      Foreground="White"
+                      FontSize="16" 
+                      Margin="0,24">
+                    <CheckBox.Content>
+                        <TextBlock Text="Remove previous all Office 365 Pro Plus products and languages installations"
+                               TextWrapping="Wrap" />
+                    </CheckBox.Content>
+                </CheckBox>
+
+                <StackPanel>
+                    <CheckBox Content="Use custom download source path" 
+                          IsChecked="{Binding CurrentConfiguration.UseCustomDownloadPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          Foreground="White"
+                          FontSize="16" 
+                          Margin="0,0,0,8" />
+                    <TextBox Text="{Binding CurrentConfiguration.DownloadPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         IsEnabled="{Binding CurrentConfiguration.UseCustomDownloadPath}" />
+                </StackPanel>
+
+                <StackPanel Margin="0,24,0,0">
+                    <CheckBox Content="Use custom installation files path" 
+                          IsChecked="{Binding CurrentConfiguration.UseCustomSourcePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          Foreground="White"
+                          FontSize="16" 
+                          Margin="0,0,0,8" />
+                    <TextBox Text="{Binding CurrentConfiguration.SourcePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         IsEnabled="{Binding CurrentConfiguration.UseCustomSourcePath}" />
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
 
         <Grid Grid.Row="2" 
               Grid.ColumnSpan="2">

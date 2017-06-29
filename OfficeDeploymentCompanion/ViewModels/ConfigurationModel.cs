@@ -24,10 +24,12 @@ namespace OfficeDeploymentCompanion.ViewModels
             this.SelectedEdition = AvailableEditions.FirstOrDefault();
         }
         
-        private ObservableCollection<Language> _addedLanguages;
+        private ObservableCollection<Language> _addedLanguages, _previousLanguagesToRemove;
         private ObservableCollection<Product> _excludedProducts;
+        private string _sourcePath, _downloadPath, _version;
         private bool _enableUpdates, _autoActivate, _forceAppShutdown, _pinIconsToTaskBar;
-        private bool _sharedComputerLicensing, _silentMode, _acceptEula;
+        private bool _sharedComputerLicensing, _silentMode, _acceptEula, _removePreviousOfficeInstallations;
+        private bool _forceUpgradeFromOffice2013, _useCustomDownloadPath, _useCustomSourcePath;
         private Channel _selectedChannel;
         private List<Channel> _availableChannels;
         private OfficeClientEdition _selectedEdition;
@@ -43,6 +45,54 @@ namespace OfficeDeploymentCompanion.ViewModels
         {
             get { return _excludedProducts; }
             set { Set(nameof(ExcludedProducts), ref _excludedProducts, value); }
+        }
+
+        public bool RemovePreviousOfficeInstallations
+        {
+            get { return _removePreviousOfficeInstallations; }
+            set { Set(nameof(RemovePreviousOfficeInstallations), ref _removePreviousOfficeInstallations, value); }
+        }
+
+        public ObservableCollection<Language> PreviousLanguagesToRemove
+        {
+            get { return _previousLanguagesToRemove; }
+            set { Set(nameof(PreviousLanguagesToRemove), ref _previousLanguagesToRemove, value); }
+        }
+
+        public bool ForceUpgradeFromOffice2013
+        {
+            get { return _forceUpgradeFromOffice2013; }
+            set { Set(nameof(ForceUpgradeFromOffice2013), ref _forceUpgradeFromOffice2013, value); }
+        }
+
+        public bool UseCustomDownloadPath
+        {
+            get { return _useCustomDownloadPath; }
+            set { Set(nameof(UseCustomDownloadPath), ref _useCustomDownloadPath, value); }
+        }
+
+        public string DownloadPath
+        {
+            get { return _downloadPath; }
+            set { Set(nameof(DownloadPath), ref _downloadPath, value); }
+        }
+
+        public bool UseCustomSourcePath
+        {
+            get { return _useCustomSourcePath; }
+            set { Set(nameof(UseCustomSourcePath), ref _useCustomSourcePath, value); }
+        }
+
+        public string SourcePath
+        {
+            get { return _sourcePath; }
+            set { Set(nameof(SourcePath), ref _sourcePath, value); }
+        }
+
+        public string Version
+        {
+            get { return _version; }
+            set { Set(nameof(Version), ref _version, value); }
         }
 
         public bool EnableUpdates
