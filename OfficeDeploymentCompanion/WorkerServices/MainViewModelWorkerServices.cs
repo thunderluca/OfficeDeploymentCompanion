@@ -74,13 +74,10 @@ namespace OfficeDeploymentCompanion.WorkerServices
 
         public ConfigurationModel InitializeConfiguration()
         {
-            var languages = GetAvailableLanguages();
-            var products = GetAvailableProducts();
-
             var channels = EnumHelper.GetEnumValuesArray<Channel>().ToList();
             var editions = EnumHelper.GetEnumValuesArray<OfficeClientEdition>().ToList();
 
-            return new ConfigurationModel(languages, products, channels, editions);
+            return new ConfigurationModel(channels, editions);
         }
 
         public ConfigurationModel LoadConfiguration(string filePath)
@@ -228,11 +225,7 @@ namespace OfficeDeploymentCompanion.WorkerServices
         {
             var languages = Languages.AvailableDictionary
                 .OrderBy(l => l.Name)
-                .Select(l => new ConfigurationModel.Language
-                {
-                    Name = $"{l.Name} ({l.Id})",
-                    Id = l.Id
-                })
+                .Select(l => l.ToConfigurationModelLanguage())
                 .ToList();
 
             languages.Insert(index: 0, item: new ConfigurationModel.Language
@@ -244,15 +237,20 @@ namespace OfficeDeploymentCompanion.WorkerServices
             return languages;
         }
 
+        public List<ConfigurationModel.Language> GetLanguagesByIds(IEnumerable<string> languagesIds)
+        {
+            return Languages.AvailableDictionary
+                .Where(l => languagesIds.Any(id => id == l.Id))
+                .OrderBy(l => l.Name)
+                .Select(l => l.ToConfigurationModelLanguage())
+                .ToList();
+        }
+
         public List<ConfigurationModel.Product> GetAvailableProducts()
         {
             var products = Products.AvailableDictionary
                 .OrderBy(p => p.Name)
-                .Select(p => new ConfigurationModel.Product
-                {
-                    Name = p.Name,
-                    Id = p.Id
-                })
+                .Select(p => p.ToConfigurationModelProduct())
                 .ToList();
 
             products.Insert(index: 0, item: new ConfigurationModel.Product
@@ -262,6 +260,15 @@ namespace OfficeDeploymentCompanion.WorkerServices
             });
 
             return products;
+        }
+
+        public List<ConfigurationModel.Product> GetProductsByIds(IEnumerable<string> productsIds)
+        {
+            return Products.AvailableDictionary
+                .Where(p => productsIds.Any(id => id == p.Id))
+                .OrderBy(p => p.Name)
+                .Select(p => p.ToConfigurationModelProduct())
+                .ToList();
         }
 
         public async Task<bool> CheckRequirementsAsync(string filePath, ConfigurationModel configuration)

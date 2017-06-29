@@ -1,4 +1,6 @@
-﻿using System;
+﻿using OfficeDeploymentCompanion.Models;
+using OfficeDeploymentCompanion.Resources;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,11 +15,12 @@ namespace OfficeDeploymentCompanion.ViewModels
             if (model == null)
                 throw new ArgumentNullException(nameof(model));
 
-            if (string.IsNullOrWhiteSpace(id) || id == "MatchOS") return;
+            if (string.IsNullOrWhiteSpace(id) || id == Constants.DefaultLanguageMatchOSId) return;
 
-            var language = model.AvailableLanguages.SingleOrDefault(al => string.Equals(al.Id, id, StringComparison.OrdinalIgnoreCase));
-            if (language != null)
-                model.AddedLanguages.Add(language);
+            var language = Languages.AvailableDictionary.SingleOrDefault(al => string.Equals(al.Id, id, StringComparison.OrdinalIgnoreCase));
+            if (language == null) return;
+
+            model.AddedLanguages.Add(language.ToConfigurationModelLanguage());
         }
 
         public static void TryAddExcludedProductIfValid(this ConfigurationModel model, string id)
@@ -27,9 +30,10 @@ namespace OfficeDeploymentCompanion.ViewModels
 
             if (string.IsNullOrWhiteSpace(id)) return;
 
-            var product = model.AvailableProducts.SingleOrDefault(ap => string.Equals(ap.Id, id, StringComparison.OrdinalIgnoreCase));
-            if (product != null)
-                model.ExcludedProducts.Add(product);
+            var product = Products.AvailableDictionary.SingleOrDefault(ap => string.Equals(ap.Id, id, StringComparison.OrdinalIgnoreCase));
+            if (product == null) return;
+
+            model.ExcludedProducts.Add(product.ToConfigurationModelProduct());
         }
     }
 }

@@ -288,10 +288,7 @@ namespace OfficeDeploymentCompanion.ViewModels
 
             if (message.ProductsIds.Length == 0) return;
 
-            var excludedProducts = this.CurrentConfiguration.AvailableProducts
-                .Where(l => message.ProductsIds.Any(id => id == l.Id))
-                .OrderBy(l => l.Name)
-                .ToArray();
+            var excludedProducts = this.MainWorkerServices.GetProductsByIds(message.ProductsIds);
 
             foreach (var product in excludedProducts)
                 this.CurrentConfiguration.ExcludedProducts.Add(product);
@@ -303,10 +300,7 @@ namespace OfficeDeploymentCompanion.ViewModels
 
             if (message.LanguagesIds.Length == 0) return;
 
-            var addedLanguages = this.CurrentConfiguration.AvailableLanguages
-                .Where(l => message.LanguagesIds.Any(id => id == l.Id))
-                .OrderBy(l => l.Name)
-                .ToArray();
+            var addedLanguages = this.MainWorkerServices.GetLanguagesByIds(message.LanguagesIds);
 
             foreach (var language in addedLanguages)
                 this.CurrentConfiguration.AddedLanguages.Add(language);

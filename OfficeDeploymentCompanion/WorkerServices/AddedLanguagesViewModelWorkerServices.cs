@@ -25,16 +25,12 @@ namespace OfficeDeploymentCompanion.WorkerServices
         {
             var languages = Languages.AvailableDictionary
                 .OrderBy(l => l.Name)
-                .Select(l => new AddedLanguagesViewModel.Language
-                {
-                    Name = $"{l.Name} ({l.Id})",
-                    Id = l.Id
-                })
+                .Select(l => l.ToAddedLanguagesViewModelLanguage())
                 .ToList();
 
             languages.Insert(index: 0, item: new AddedLanguagesViewModel.Language
             {
-                Name = "Select a language to include in Office installation",
+                Name = "Select a language",
                 Id = string.Empty
             });
 

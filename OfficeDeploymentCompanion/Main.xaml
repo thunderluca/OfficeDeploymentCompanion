@@ -125,7 +125,8 @@
                       Margin="0,8" />
         </StackPanel>
 
-        <StackPanel Grid.Row="0" 
+        <StackPanel Grid.Row="0"
+                    Grid.RowSpan="2"
                     Grid.Column="1"
                     Margin="12">
             <StackPanel Orientation="Horizontal">
@@ -181,17 +182,14 @@
                        Foreground="White"
                        Padding="4"
                        Visibility="{Binding CurrentConfiguration.AddedLanguages.Count, Converter={StaticResource CountToOppositeVisibilityConverter}}" />
-        </StackPanel>
 
-        <StackPanel Grid.Row="1" 
-                    Grid.Column="1"
-                    Margin="12">
-            <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal"
+                        Margin="0,24,0,0">
                 <TextBlock Text="Programs to exclude"
                            VerticalAlignment="Center"
                            FontSize="16"
                            Foreground="White" />
-                
+
                 <Button Content="Choose programs"
                         FontSize="16"
                         FontWeight="SemiBold"

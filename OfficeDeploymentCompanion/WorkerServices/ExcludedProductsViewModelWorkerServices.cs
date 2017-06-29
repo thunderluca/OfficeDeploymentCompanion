@@ -25,17 +25,12 @@ namespace OfficeDeploymentCompanion.WorkerServices
         {
             var products = Products.AvailableDictionary
                 .OrderBy(p => p.Name)
-                .Select(p => new ExcludedProductsViewModel.Product
-                {
-                    Id = p.Id,
-                    Name = p.Name,
-                    IconKey = $"{p.Id}IconKey"
-                })
+                .Select(p => p.ToExcludedProductsViewModelProduct())
                 .ToList();
 
             products.Insert(index: 0, item: new ExcludedProductsViewModel.Product
             {
-                Name = "Select a product to exclude from Office installation",
+                Name = "Select a program",
                 Id = string.Empty
             });
 

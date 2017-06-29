@@ -83,6 +83,8 @@
     <Compile Include="Messages\AddedLanguagesMessage.cs" />
     <Compile Include="Messages\ExcludedProductsMessage.cs" />
     <Compile Include="Models\DisplayLevel.cs" />
+    <Compile Include="Models\Extensions\LanguagesExtensions.cs" />
+    <Compile Include="Models\Extensions\ProductsExtensions.cs" />
     <Compile Include="Models\OfficeClientEdition.cs" />
     <Compile Include="Models\Extensions\OfficeClientEditionExtensions.cs" />
     <Compile Include="Models\Channel.cs" />
