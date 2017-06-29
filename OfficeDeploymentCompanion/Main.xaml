@@ -55,7 +55,7 @@
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="0"
-                  VerticalAlignment="Center">
+                  VerticalAlignment="Top">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
@@ -87,14 +87,14 @@
                 <TextBlock Text="Edition" 
                            Padding="4"
                            Foreground="White"
-                           Margin="0,12,0,0" />
+                           Margin="0,8,0,0" />
                 <ComboBox ItemsSource="{Binding CurrentConfiguration.AvailableEditions}" 
                           SelectedItem="{Binding CurrentConfiguration.SelectedEdition, Mode=TwoWay}" />
                 
                 <TextBlock Text="Version" 
                            Padding="4"
                            Foreground="White"
-                           Margin="0,12,0,0" />
+                           Margin="0,8,0,0" />
                 <TextBox Text="{Binding Version, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
         </Grid>
@@ -140,24 +140,29 @@
                       Grid.Column="1"
                       Margin="12">
             <StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Languages to include"
-                           VerticalAlignment="Center"
-                           FontSize="16"
-                           Foreground="White" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    
+                    <TextBlock Grid.Column="0" 
+                               Text="Languages to include"
+                               VerticalAlignment="Center"
+                               FontSize="16"
+                               Foreground="White" />
 
-                    <Button Content="Choose languages"
-                        FontSize="16"
-                        FontWeight="SemiBold"
-                        Foreground="White"
-                        BorderBrush="DarkGray"
-                        BorderThickness="2.5"
-                        Padding="20,10"
-                        Margin="12,0"
-                        HorizontalAlignment="Left"
-                        Command="{Binding ManageAddedLanguagesCommand}"
-                        Style="{StaticResource AccentedSquareButtonStyle}" />
-                </StackPanel>
+                    <Button Grid.Column="1"
+                            Content="Choose languages"
+                            FontSize="13"
+                            FontWeight="SemiBold"
+                            Foreground="White"
+                            BorderBrush="DarkGray"
+                            BorderThickness="2.5"
+                            Padding="20,10"
+                            Command="{Binding ManageAddedLanguagesCommand}"
+                            Style="{StaticResource AccentedSquareButtonStyle}" />
+                </Grid>
 
                 <ListBox ItemsSource="{Binding CurrentConfiguration.AddedLanguages, Mode=OneWay}"
                      Margin="0,12,0,0"
@@ -194,25 +199,29 @@
                        Padding="4"
                        Visibility="{Binding CurrentConfiguration.AddedLanguages.Count, Converter={StaticResource CountToOppositeVisibilityConverter}}" />
 
-                <StackPanel Orientation="Horizontal"
-                        Margin="0,24,0,0">
-                    <TextBlock Text="Programs to exclude"
-                           VerticalAlignment="Center"
-                           FontSize="16"
-                           Foreground="White" />
+                <Grid Margin="0,24,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    
+                    <TextBlock Grid.Column="0" 
+                               Text="Programs to exclude"
+                               VerticalAlignment="Center"
+                               FontSize="16"
+                               Foreground="White" />
 
-                    <Button Content="Choose programs"
-                        FontSize="16"
-                        FontWeight="SemiBold"
-                        Foreground="White"
-                        BorderBrush="DarkGray"
-                        BorderThickness="2.5"
-                        Padding="20,10"
-                        Margin="12,0"
-                        HorizontalAlignment="Left"
-                        Command="{Binding ManageExcludedProductsCommand}"
-                        Style="{StaticResource AccentedSquareButtonStyle}" />
-                </StackPanel>
+                    <Button Grid.Column="1" 
+                            Content="Choose programs"
+                            FontSize="13"
+                            FontWeight="SemiBold"
+                            Foreground="White"
+                            BorderBrush="DarkGray"
+                            BorderThickness="2.5"
+                            Padding="20,10"
+                            Command="{Binding ManageExcludedProductsCommand}"
+                            Style="{StaticResource AccentedSquareButtonStyle}" />
+                </Grid>
 
                 <ListBox ItemsSource="{Binding CurrentConfiguration.ExcludedProducts, Mode=OneWay}"
                      Margin="0,12,0,0"
@@ -265,7 +274,8 @@
                           FontSize="16" 
                           Margin="0,0,0,8" />
                     <TextBox Text="{Binding CurrentConfiguration.DownloadPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         IsEnabled="{Binding CurrentConfiguration.UseCustomDownloadPath}" />
+                             Foreground="Black"
+                             IsEnabled="{Binding CurrentConfiguration.UseCustomDownloadPath}" />
                 </StackPanel>
 
                 <StackPanel Margin="0,24,0,0">
@@ -275,7 +285,8 @@
                           FontSize="16" 
                           Margin="0,0,0,8" />
                     <TextBox Text="{Binding CurrentConfiguration.SourcePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         IsEnabled="{Binding CurrentConfiguration.UseCustomSourcePath}" />
+                             Foreground="Black"
+                             IsEnabled="{Binding CurrentConfiguration.UseCustomSourcePath}" />
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>
