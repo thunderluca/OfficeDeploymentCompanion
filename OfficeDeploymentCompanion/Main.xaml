@@ -111,28 +111,24 @@
                       Foreground="White"
                       FontSize="16"
                       Margin="0,8" />
-            <CheckBox Content="Auto activate Office" 
-                      IsChecked="{Binding CurrentConfiguration.AutoActivate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                      Foreground="White"
-                      FontSize="16" />
             <CheckBox Content="Force apps shutdown to install" 
                       IsChecked="{Binding CurrentConfiguration.ForceAppShutdown, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                       Foreground="White"
-                      FontSize="16" 
-                      Margin="0,8" />
+                      FontSize="16" />
             <CheckBox Content="Pin icons to taskbar (if supported)" 
                       IsChecked="{Binding CurrentConfiguration.PinIconsToTaskBar, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                       Foreground="White"
-                      FontSize="16" />
+                      FontSize="16" 
+                      Margin="0,8" />
             <CheckBox Content="Silent mode (no UI)" 
                       IsChecked="{Binding CurrentConfiguration.SilentMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                       Foreground="White"
-                      FontSize="16" 
-                      Margin="0,8" />
+                      FontSize="16" />
             <CheckBox Content="Accept EULA" 
                       IsChecked="{Binding CurrentConfiguration.AcceptEula, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                       Foreground="White"
-                      FontSize="16" />
+                      FontSize="16" 
+                      Margin="0,8" />
         </StackPanel>
 
         <ScrollViewer Grid.Row="0"
