@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OfficeDeploymentCompanion.Messages
 {
@@ -10,9 +7,7 @@ namespace OfficeDeploymentCompanion.Messages
     {
         public AddedLanguagesMessage(IEnumerable<string> languagesIds)
         {
-            this.LanguagesIds = languagesIds != null
-                ? languagesIds.ToArray()
-                : new string[0];
+            this.LanguagesIds = languagesIds?.ToArray() ?? new string[0];
         }
 
         public string[] LanguagesIds { get; }

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OfficeDeploymentCompanion.Messages
 {
@@ -10,9 +7,7 @@ namespace OfficeDeploymentCompanion.Messages
     {
         public ExcludedProductsMessage(IEnumerable<string> productsIds)
         {
-            this.ProductsIds = productsIds != null 
-                ? productsIds.ToArray()
-                : new string[0];
+            this.ProductsIds = productsIds?.ToArray() ?? new string[0];
         }
 
         public string[] ProductsIds { get; }

@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
@@ -22,10 +21,7 @@ namespace OfficeDeploymentCompanion.WorkerServices
 
         public MainViewModelWorkerServices(IDialogCoordinator dialogCoordinator)
         {
-            if (dialogCoordinator == null)
-                throw new ArgumentNullException(nameof(dialogCoordinator));
-
-            this.DialogCoordinator = dialogCoordinator;
+            this.DialogCoordinator = dialogCoordinator ?? throw new ArgumentNullException(nameof(dialogCoordinator));
         }
 
         private static Process DownloadProcess { get; set; }

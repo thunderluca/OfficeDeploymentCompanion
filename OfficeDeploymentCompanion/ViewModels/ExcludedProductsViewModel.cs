@@ -3,8 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OfficeDeploymentCompanion.ViewModels
 {
@@ -14,10 +12,7 @@ namespace OfficeDeploymentCompanion.ViewModels
             List<Product> availableProducts,
             IEnumerable<Product> alreadyExcludedProducts)
         {
-            if (availableProducts == null)
-                throw new ArgumentNullException(nameof(availableProducts));
-            
-            this.AvailableProducts = availableProducts;
+            this.AvailableProducts = availableProducts ?? throw new ArgumentNullException(nameof(availableProducts));
             this.ExcludedProducts = new ObservableCollection<Product>();
 
             if (alreadyExcludedProducts == null || alreadyExcludedProducts.Count() == 0) return;

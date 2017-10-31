@@ -3,8 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OfficeDeploymentCompanion.ViewModels
 {
@@ -14,10 +12,7 @@ namespace OfficeDeploymentCompanion.ViewModels
                List<Language> availableLanguages,
                IEnumerable<Language> alreadyAddedLanguages)
         {
-            if (availableLanguages == null)
-                throw new ArgumentNullException(nameof(availableLanguages));
-
-            this.AvailableLanguages = availableLanguages;
+            this.AvailableLanguages = availableLanguages ?? throw new ArgumentNullException(nameof(availableLanguages));
             this.AddedLanguages = new ObservableCollection<Language>();
 
             if (alreadyAddedLanguages == null || alreadyAddedLanguages.Count() == 0) return;

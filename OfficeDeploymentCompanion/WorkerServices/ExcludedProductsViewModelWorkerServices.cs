@@ -1,10 +1,7 @@
 ﻿using OfficeDeploymentCompanion.Models;
 using OfficeDeploymentCompanion.ViewModels;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OfficeDeploymentCompanion.WorkerServices
 {
@@ -14,9 +11,10 @@ namespace OfficeDeploymentCompanion.WorkerServices
         {
             var availableProducts = this.GetAvailableProducts();
 
-            var alreadyExcludedProducts = alreadyExcludedProductsIds != null && alreadyExcludedProductsIds.Count() > 0
-                ? availableProducts.Where(p => alreadyExcludedProductsIds.Any(epId => epId == p.Id))
-                : new ExcludedProductsViewModel.Product[0];
+            if (alreadyExcludedProductsIds == null || alreadyExcludedProductsIds.Count() == 0)
+                return new ExcludedProductsViewModel(availableProducts, new ExcludedProductsViewModel.Product[0]);
+
+            var alreadyExcludedProducts = availableProducts.Where(p => alreadyExcludedProductsIds.Any(epId => epId == p.Id));
 
             return new ExcludedProductsViewModel(availableProducts, alreadyExcludedProducts);
         }

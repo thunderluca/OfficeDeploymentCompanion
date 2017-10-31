@@ -3,8 +3,6 @@ using OfficeDeploymentCompanion.Resources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 
 namespace OfficeDeploymentCompanion.Helpers
@@ -21,8 +19,8 @@ namespace OfficeDeploymentCompanion.Helpers
 
         public static void WriteOffice365ProPlusRetailProductElement(
             this XmlWriter xmlWriter, 
-            IEnumerable<string> languages = null, 
-            IEnumerable<string> excludedAppIds = null)
+            IEnumerable<string> languages, 
+            IEnumerable<string> excludedAppIds)
         {
             if (xmlWriter == null)
                 throw new ArgumentNullException(nameof(xmlWriter));
@@ -40,7 +38,7 @@ namespace OfficeDeploymentCompanion.Helpers
                     xmlWriter.WriteLanguageElement(language);
             }
 
-            if (excludedAppIds != null && excludedAppIds.Count() > 0)
+            if (excludedAppIds?.Count() > 0)
             {
                 foreach (var excludedApp in excludedAppIds)
                     xmlWriter.WriteExcludeAppElement(excludedApp);

@@ -14,7 +14,7 @@ namespace OfficeDeploymentCompanion.ViewModels
             SimpleIoc.Default.Register<MainViewModelWorkerServices>();
             SimpleIoc.Default.Register<AddedLanguagesViewModelWorkerServices>();
             SimpleIoc.Default.Register<ExcludedProductsViewModelWorkerServices>();
-            SimpleIoc.Default.Register<IDialogCoordinator>(() => DialogCoordinator.Instance);
+            SimpleIoc.Default.Register(() => DialogCoordinator.Instance);
 
             SimpleIoc.Default.Register<MainViewModel>();
         }

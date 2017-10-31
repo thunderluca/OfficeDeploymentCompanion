@@ -1,10 +1,7 @@
 ﻿using OfficeDeploymentCompanion.Models;
 using OfficeDeploymentCompanion.ViewModels;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OfficeDeploymentCompanion.WorkerServices
 {
@@ -14,9 +11,10 @@ namespace OfficeDeploymentCompanion.WorkerServices
         {
             var availableLanguages = this.GetAvailableLanguages();
 
-            var alreadyAddedLanguages = alreadyAddedLanguagesIds != null && alreadyAddedLanguagesIds.Count() > 0
-                ? availableLanguages.Where(p => alreadyAddedLanguagesIds.Any(epId => epId == p.Id))
-                : new AddedLanguagesViewModel.Language[0];
+            if (alreadyAddedLanguagesIds == null || alreadyAddedLanguagesIds.Count() == 0)
+                return new AddedLanguagesViewModel(availableLanguages, new AddedLanguagesViewModel.Language[0]);
+
+            var alreadyAddedLanguages = availableLanguages.Where(p => alreadyAddedLanguagesIds.Any(epId => epId == p.Id));
 
             return new AddedLanguagesViewModel(availableLanguages, alreadyAddedLanguages);
         }

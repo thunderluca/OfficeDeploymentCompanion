@@ -27,9 +27,7 @@ namespace OfficeDeploymentCompanion.Views
 
         private void OnConfirmClick(object sender, RoutedEventArgs e)
         {
-            var languagesIds = ViewModel.AddedLanguages != null
-                ? ViewModel.AddedLanguages.Select(l => l.Id).ToArray()
-                : new string[0];
+            var languagesIds = ViewModel.AddedLanguages?.Select(l => l.Id).ToArray() ?? new string[0];
 
             var message = new AddedLanguagesMessage(languagesIds);
 

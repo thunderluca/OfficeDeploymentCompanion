@@ -6,7 +6,6 @@ using OfficeDeploymentCompanion.Messages;
 using OfficeDeploymentCompanion.Views;
 using OfficeDeploymentCompanion.WorkerServices;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -27,22 +26,10 @@ namespace OfficeDeploymentCompanion.ViewModels
             ExcludedProductsViewModelWorkerServices excludedProductsWorkerServices,
             IDialogCoordinator dialogCoordinator)
         {
-            if (mainWorkerServices == null)
-                throw new ArgumentNullException(nameof(mainWorkerServices));
-
-            if (addedLanguagesWorkerServices == null)
-                throw new ArgumentNullException(nameof(addedLanguagesWorkerServices));
-
-            if (excludedProductsWorkerServices == null)
-                throw new ArgumentNullException(nameof(excludedProductsWorkerServices));
-
-            if (dialogCoordinator == null)
-                throw new ArgumentNullException(nameof(dialogCoordinator));
-
-            this.MainWorkerServices = mainWorkerServices;
-            this.AddedLanguagesWorkerServices = addedLanguagesWorkerServices;
-            this.ExcludedProductsWorkerServices = excludedProductsWorkerServices;
-            this.DialogCoordinator = dialogCoordinator;
+            this.MainWorkerServices = mainWorkerServices ?? throw new ArgumentNullException(nameof(mainWorkerServices));
+            this.AddedLanguagesWorkerServices = addedLanguagesWorkerServices ?? throw new ArgumentNullException(nameof(addedLanguagesWorkerServices));
+            this.ExcludedProductsWorkerServices = excludedProductsWorkerServices ?? throw new ArgumentNullException(nameof(excludedProductsWorkerServices));
+            this.DialogCoordinator = dialogCoordinator ?? throw new ArgumentNullException(nameof(dialogCoordinator));
 
             if (this.CurrentConfiguration == null)
                 this.CurrentConfiguration = this.MainWorkerServices.InitializeConfiguration();

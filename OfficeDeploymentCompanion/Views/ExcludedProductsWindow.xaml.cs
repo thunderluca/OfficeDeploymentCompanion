@@ -27,9 +27,7 @@ namespace OfficeDeploymentCompanion.Views
 
         private void OnConfirmClick(object sender, RoutedEventArgs e)
         {
-            var productsIds = ViewModel.ExcludedProducts != null
-                ? ViewModel.ExcludedProducts.Select(p => p.Id).ToArray()
-                : new string[0];
+            var productsIds = ViewModel.ExcludedProducts?.Select(p => p.Id).ToArray() ?? new string[0];
 
             var message = new ExcludedProductsMessage(productsIds);
 
