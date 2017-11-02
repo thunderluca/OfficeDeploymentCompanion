@@ -21,7 +21,7 @@ namespace OfficeDeploymentCompanion.WorkerServices
 
         public List<AddedLanguagesViewModel.Language> GetAvailableLanguages()
         {
-            var languages = Languages.AvailableDictionary
+            var languages = Languages.Available
                 .OrderBy(l => l.Name)
                 .Select(l => l.ToAddedLanguagesViewModelLanguage())
                 .ToList();

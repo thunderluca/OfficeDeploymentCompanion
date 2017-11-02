@@ -1,5 +1,5 @@
 ﻿using OfficeDeploymentCompanion.Models;
-using OfficeDeploymentCompanion.Resources;
+using OfficeDeploymentCompanion.Properties;
 using System;
 using System.Linq;
 
@@ -12,9 +12,9 @@ namespace OfficeDeploymentCompanion.ViewModels
             if (model == null)
                 throw new ArgumentNullException(nameof(model));
 
-            if (string.IsNullOrWhiteSpace(id) || id == Constants.DefaultLanguageMatchOSId) return;
+            if (string.IsNullOrWhiteSpace(id) || id == Resources.DefaultLanguageMatchOSId) return;
 
-            var language = Languages.AvailableDictionary.SingleOrDefault(al => string.Equals(al.Id, id, StringComparison.OrdinalIgnoreCase));
+            var language = Languages.Available.SingleOrDefault(al => string.Equals(al.Id, id, StringComparison.OrdinalIgnoreCase));
             if (language == null) return;
 
             model.AddedLanguages.Add(language.ToConfigurationModelLanguage());
@@ -27,7 +27,7 @@ namespace OfficeDeploymentCompanion.ViewModels
 
             if (string.IsNullOrWhiteSpace(id)) return;
 
-            var product = Products.AvailableDictionary.SingleOrDefault(ap => string.Equals(ap.Id, id, StringComparison.OrdinalIgnoreCase));
+            var product = Products.Available.SingleOrDefault(ap => string.Equals(ap.Id, id, StringComparison.OrdinalIgnoreCase));
             if (product == null) return;
 
             model.ExcludedProducts.Add(product.ToConfigurationModelProduct());

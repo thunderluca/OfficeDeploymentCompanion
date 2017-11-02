@@ -3,7 +3,7 @@ using MahApps.Metro.Controls.Dialogs;
 using Microsoft.Win32;
 using OfficeDeploymentCompanion.Helpers;
 using OfficeDeploymentCompanion.Models;
-using OfficeDeploymentCompanion.Resources;
+using OfficeDeploymentCompanion.Properties;
 using OfficeDeploymentCompanion.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -28,7 +28,7 @@ namespace OfficeDeploymentCompanion.WorkerServices
 
         public string GetDefaultFilePath() => Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
-            Constants.DefaultConfigurationFileName);
+            Resources.DefaultConfigurationFileName);
 
         public async Task CreateConfigurationAsync(string filePath, ConfigurationModel configuration)
         {
@@ -204,7 +204,7 @@ namespace OfficeDeploymentCompanion.WorkerServices
         {
             var openFileDialog = new OpenFileDialog
             {
-                DefaultExt = Constants.DefaultFileDialogExtension,
+                DefaultExt = Resources.DefaultFileDialogExtension,
                 Filter = "Office XML configuration file (.xml)|*.xml"
             };
             var result = openFileDialog.ShowDialog();
@@ -218,8 +218,8 @@ namespace OfficeDeploymentCompanion.WorkerServices
         {
             var saveFileDialog = new SaveFileDialog
             {
-                FileName = Constants.DefaultConfigurationFileName,
-                DefaultExt = Constants.DefaultFileDialogExtension,
+                FileName = Resources.DefaultConfigurationFileName,
+                DefaultExt = Resources.DefaultFileDialogExtension,
                 Filter = "Office XML configuration file (.xml)|*.xml"
             };
             var result = saveFileDialog.ShowDialog();
@@ -231,7 +231,7 @@ namespace OfficeDeploymentCompanion.WorkerServices
 
         public List<ConfigurationModel.Language> GetAvailableLanguages()
         {
-            var languages = Languages.AvailableDictionary
+            var languages = Languages.Available
                 .OrderBy(l => l.Name)
                 .Select(l => l.ToConfigurationModelLanguage())
                 .ToList();
@@ -247,7 +247,7 @@ namespace OfficeDeploymentCompanion.WorkerServices
 
         public List<ConfigurationModel.Language> GetLanguagesByIds(IEnumerable<string> languagesIds)
         {
-            return Languages.AvailableDictionary
+            return Languages.Available
                 .Where(l => languagesIds.Any(id => id == l.Id))
                 .OrderBy(l => l.Name)
                 .Select(l => l.ToConfigurationModelLanguage())
@@ -256,7 +256,7 @@ namespace OfficeDeploymentCompanion.WorkerServices
 
         public List<ConfigurationModel.Product> GetAvailableProducts()
         {
-            var products = Products.AvailableDictionary
+            var products = Products.Available
                 .OrderBy(p => p.Name)
                 .Select(p => p.ToConfigurationModelProduct())
                 .ToList();
@@ -272,7 +272,7 @@ namespace OfficeDeploymentCompanion.WorkerServices
 
         public List<ConfigurationModel.Product> GetProductsByIds(IEnumerable<string> productsIds)
         {
-            return Products.AvailableDictionary
+            return Products.Available
                 .Where(p => productsIds.Any(id => id == p.Id))
                 .OrderBy(p => p.Name)
                 .Select(p => p.ToConfigurationModelProduct())
@@ -311,7 +311,7 @@ namespace OfficeDeploymentCompanion.WorkerServices
                         UseShellExecute = true,
                         WorkingDirectory = folder,
                         WindowStyle = ProcessWindowStyle.Hidden,
-                        FileName = Constants.DefaultSetupFileName,
+                        FileName = Resources.DefaultSetupFileName,
                         Arguments = $"/download \"{filePath}\""
                     };
 
@@ -410,7 +410,7 @@ namespace OfficeDeploymentCompanion.WorkerServices
 
         private bool CheckSetupFile(string folder)
         {
-            var setupFilePath = Path.Combine(folder, Constants.DefaultSetupFileName);
+            var setupFilePath = Path.Combine(folder, Resources.DefaultSetupFileName);
             if (File.Exists(setupFilePath)) return true;
 
             DialogCoordinator.ShowMessageAsync(
@@ -420,7 +420,7 @@ namespace OfficeDeploymentCompanion.WorkerServices
                 style: MessageDialogStyle.AffirmativeAndNegative).ContinueWith(task => 
                 {
                     if (task.Result == MessageDialogResult.Affirmative)
-                        Process.Start(new ProcessStartInfo(Constants.OfficeDeploymentToolDownloadUrl));
+                        Process.Start(new ProcessStartInfo(Resources.OfficeDeploymentToolDownloadUrl));
                 });
 
             return false;

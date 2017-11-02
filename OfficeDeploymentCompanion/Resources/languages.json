@@ -1,0 +1,162 @@
+﻿[
+  {
+    "name": "Arabic",
+    "id": "ar-sa"
+  },
+  {
+    "name": "Bulgarian",
+    "id": "bg-bg"
+  },
+  {
+    "name": "Chinese (Simplified)",
+    "id": "zh-cn"
+  },
+  {
+    "name": "Chinese",
+    "id": "zh-tw"
+  },
+  {
+    "name": "Croatian",
+    "id": "hr-hr"
+  },
+  {
+    "name": "Czech",
+    "id": "cs-cz"
+  },
+  {
+    "name": "Danish",
+    "id": "da-dk"
+  },
+  {
+    "name": "Dutch",
+    "id": "nl-nl"
+  },
+  {
+    "name": "English",
+    "id": "en-us"
+  },
+  {
+    "name": "Estonian",
+    "id": "et-ee"
+  },
+  {
+    "name": "Finnish",
+    "id": "fi-fi"
+  },
+  {
+    "name": "French",
+    "id": "fr-fr"
+  },
+  {
+    "name": "German",
+    "id": "de-de"
+  },
+  {
+    "name": "Greek",
+    "id": "el-gr"
+  },
+  {
+    "name": "Hebrew",
+    "id": "he-il"
+  },
+  {
+    "name": "Hindi",
+    "id": "hi-in"
+  },
+  {
+    "name": "Hungarian",
+    "id": "hu-hu"
+  },
+  {
+    "name": "Indonesian",
+    "id": "id-id"
+  },
+  {
+    "name": "Italian",
+    "id": "it-it"
+  },
+  {
+    "name": "Japanese",
+    "id": "ja-jp"
+  },
+  {
+    "name": "Kazakh",
+    "id": "kk-kz"
+  },
+  {
+    "name": "Korean",
+    "id": "ko-kr"
+  },
+  {
+    "name": "Latvian",
+    "id": "lv-lv"
+  },
+  {
+    "name": "Lithuanian",
+    "id": "lt-lt"
+  },
+  {
+    "name": "Malay",
+    "id": "ms-my"
+  },
+  {
+    "name": "Norwegian (Bokmål)",
+    "id": "nb-no"
+  },
+  {
+    "name": "Polish",
+    "id": "pl-pl"
+  },
+  {
+    "name": "Portuguese",
+    "id": "pt-br"
+  },
+  {
+    "name": "Portuguese",
+    "id": "pt-pt"
+  },
+  {
+    "name": "Romanian",
+    "id": "ro-ro"
+  },
+  {
+    "name": "Russian",
+    "id": "ru-ru"
+  },
+  {
+    "name": "Serbian (Latin)",
+    "id": "sr-latn-rs"
+  },
+  {
+    "name": "Slovak",
+    "id": "sk-sk"
+  },
+  {
+    "name": "Slovenian",
+    "id": "sl-si"
+  },
+  {
+    "name": "Spanish",
+    "id": "es-es"
+  },
+  {
+    "name": "Swedish",
+    "id": "sv-se"
+  },
+  {
+    "name": "Thai",
+    "id": "th-th"
+  },
+  {
+    "name": "Turkish",
+    "id": "tr-tr"
+  },
+  {
+    "name": "Ukrainian",
+    "id": "uk-ua"
+  },
+  {
+    "name": "Vietnamese",
+    "id": "vi-vn"
+  }
+]

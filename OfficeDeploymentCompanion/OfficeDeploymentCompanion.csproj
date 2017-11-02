@@ -52,6 +52,9 @@
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -91,7 +94,6 @@
     <Compile Include="Models\Languages.cs" />
     <Compile Include="Models\O365ProPlusSettings.cs" />
     <Compile Include="Models\Products.cs" />
-    <Compile Include="Resources\Constants.cs" />
     <Compile Include="ViewModels\AddedLanguagesViewModel.cs" />
     <Compile Include="ViewModels\ConfigurationModel.cs" />
     <Compile Include="ViewModels\ExcludedProductsViewModel.cs" />
@@ -155,6 +157,8 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Resource Include="Resources\languages.json" />
+    <Resource Include="Resources\products.json" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

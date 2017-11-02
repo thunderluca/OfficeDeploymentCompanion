@@ -1,5 +1,5 @@
 ﻿using OfficeDeploymentCompanion.Models;
-using OfficeDeploymentCompanion.Resources;
+using OfficeDeploymentCompanion.Properties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,7 +47,7 @@ namespace OfficeDeploymentCompanion.Helpers
             xmlWriter.WriteEndElement();
         }
 
-        private static void WriteDefaultLanguageElement(this XmlWriter xmlWriter) => WriteLanguageElement(xmlWriter, Constants.DefaultLanguageMatchOSId);
+        private static void WriteDefaultLanguageElement(this XmlWriter xmlWriter) => WriteLanguageElement(xmlWriter, Resources.DefaultLanguageMatchOSId);
 
         private static void WriteLanguageElement(this XmlWriter xmlWriter, string languageCultureName)
         {
@@ -57,8 +57,8 @@ namespace OfficeDeploymentCompanion.Helpers
             if (string.IsNullOrWhiteSpace(languageCultureName))
                 throw new ArgumentNullException(nameof(languageCultureName));
 
-            if (languageCultureName != Constants.DefaultLanguageMatchOSId 
-                && Languages.AvailableDictionary.All(l => l.Id != languageCultureName))
+            if (languageCultureName != Resources.DefaultLanguageMatchOSId 
+                && Languages.Available.All(l => l.Id != languageCultureName))
                 throw new NotSupportedException($"Unsupported language: {languageCultureName}");
 
             xmlWriter.WriteStartElement("Language");
@@ -74,7 +74,7 @@ namespace OfficeDeploymentCompanion.Helpers
             if (string.IsNullOrWhiteSpace(excludedAppId))
                 throw new ArgumentNullException(nameof(excludedAppId));
 
-            if (Products.AvailableDictionary.All(p => p.Id != excludedAppId))
+            if (Products.Available.All(p => p.Id != excludedAppId))
                 throw new NotSupportedException($"Unsupported product: {excludedAppId}");
 
             xmlWriter.WriteStartElement("ExcludeApp");

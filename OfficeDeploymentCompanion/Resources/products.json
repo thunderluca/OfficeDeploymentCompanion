@@ -1,0 +1,42 @@
+﻿[
+  {
+    "name": "Access",
+    "id": "Access"
+  },
+  {
+    "name": "Excel",
+    "id": "Excel"
+  },
+  {
+    "name": "OneDrive for Business",
+    "id": "Groove"
+  },
+  {
+    "name": "Skype for Business",
+    "id": "Lync"
+  },
+  {
+    "name": "OneDrive",
+    "id": "OneDrive"
+  },
+  {
+    "name": "OneNote",
+    "id": "OneNote"
+  },
+  {
+    "name": "Outlook",
+    "id": "Outlook"
+  },
+  {
+    "name": "PowerPoint",
+    "id": "PowerPoint"
+  },
+  {
+    "name": "Publisher",
+    "id": "Publisher"
+  },
+  {
+    "name": "Word",
+    "id": "Word"
+  }
+]

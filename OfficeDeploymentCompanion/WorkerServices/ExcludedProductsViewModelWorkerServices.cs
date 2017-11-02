@@ -21,7 +21,7 @@ namespace OfficeDeploymentCompanion.WorkerServices
 
         public List<ExcludedProductsViewModel.Product> GetAvailableProducts()
         {
-            var products = Products.AvailableDictionary
+            var products = Products.Available
                 .OrderBy(p => p.Name)
                 .Select(p => p.ToExcludedProductsViewModelProduct())
                 .ToList();
