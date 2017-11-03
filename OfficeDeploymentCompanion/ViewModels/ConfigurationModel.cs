@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Media;
 
 namespace OfficeDeploymentCompanion.ViewModels
 {
@@ -171,6 +172,10 @@ namespace OfficeDeploymentCompanion.ViewModels
             public string Name { get; set; }
 
             public string Id { get; set; }
+
+            public string PathData { get; set; }
+
+            public SolidColorBrush PathBrush { get; set; }
         }
 
         public override bool Equals(object obj)

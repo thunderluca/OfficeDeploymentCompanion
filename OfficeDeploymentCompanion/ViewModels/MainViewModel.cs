@@ -167,7 +167,7 @@ namespace OfficeDeploymentCompanion.ViewModels
                         var model = this.AddedLanguagesWorkerServices.GetAddedLanguagesViewModel(addedLanguagesIds);
 
                         var excludedProductsWindow = new AddedLanguagesWindow(model);
-                        excludedProductsWindow.Show();
+                        excludedProductsWindow.ShowDialog();
                     });
                 }
 
@@ -188,7 +188,7 @@ namespace OfficeDeploymentCompanion.ViewModels
                         var model = this.ExcludedProductsWorkerServices.GetExcludedProductsViewModel(excludedProductsIds);
 
                         var excludedProductsWindow = new ExcludedProductsWindow(model);
-                        excludedProductsWindow.Show();
+                        excludedProductsWindow.ShowDialog();
                     });
                 }
 

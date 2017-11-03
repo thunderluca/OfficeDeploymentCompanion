@@ -12,6 +12,7 @@
                       dialog:DialogParticipation.Register="{Binding}"
                       ShowIconOnTitleBar="True"
                       Title="{Binding Title, Mode=OneTime}" 
+                      TitleCaps="False"
                       BorderBrush="{StaticResource AccentColorBrush}"
                       Background="{StaticResource DarkGrayVS}"
                       WindowTitleBrush="{StaticResource AccentColorBrush}"
@@ -20,6 +21,13 @@
                       ResizeMode="CanMinimize"
                       Width="800"
                       Height="600">
+    <controls:MetroWindow.TitleTemplate>
+        <DataTemplate>
+            <TextBlock FontFamily="Segoe UI" 
+                       Text="{Binding}"
+                       VerticalAlignment="Center" />
+        </DataTemplate>
+    </controls:MetroWindow.TitleTemplate>
     <controls:MetroWindow.IconTemplate>
         <DataTemplate>
             <Path Width="16" 
@@ -46,39 +54,26 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Row="0" 
+        <Grid Grid.RowSpan="3"
+              Grid.ColumnSpan="2"
+              Opacity="0.32">
+            <Path Width="800" 
+                  Height="600" 
+                  Stretch="Uniform" 
+                  Margin="8,0,24,0"
+                  Fill="{StaticResource AccentColorBrush}" 
+                  Data="M 206.946,85.6845L 307.998,85.6845L 307.998,274.314L 206.946,274.314L 206.946,85.6845 Z M 51.9978,84.0028L 200.205,57.0576L 200.205,302.95L 51.9978,276.001L 51.9978,84.0028 Z M 295.384,215.369L 295.384,188.421L 268.437,188.421L 268.437,215.369L 295.384,215.369 Z M 295.42,261.444L 295.42,256.982L 268.473,256.982L 268.473,261.444L 295.42,261.444 Z M 295.384,169.895L 295.384,142.947L 268.437,142.947L 268.437,169.895L 295.384,169.895 Z M 295.365,124.422L 295.366,97.4739L 268.419,97.4739L 268.419,124.422L 295.365,124.422 Z M 151.332,176.501L 150.173,184.06L 158.44,191.657L 152.299,204.431L 143.081,199.216L 137.86,204.431L 138.828,215.779L 127.499,219.587L 124.405,209.372L 117.296,208.181L 111.171,217.204L 100.794,209.372L 105.031,199.216L 100.794,193.083L 91.5752,194.275L 88.4813,179.118L 97.6999,175.33L 97.6999,167.536L 90.4171,159.939L 96.7323,147.4L 105.967,152.38L 110.013,147.4L 109.045,135.818L 120.39,132.009L 124.405,142.224L 130.768,143.65L 137.86,134.626L 147.095,142.224L 144.048,152.38L 147.095,158.747L 157.472,157.614L 160.55,171.521L 151.332,176.501 Z M 107.379,175.954C 107.379,178.793 107.813,181.456 108.68,183.943C 109.548,186.43 110.738,188.604 112.25,190.466C 113.763,192.328 115.53,193.793 117.55,194.861C 119.571,195.929 121.734,196.462 124.04,196.462C 126.346,196.462 128.514,195.929 130.546,194.861C 132.576,193.793 134.343,192.328 135.845,190.466C 137.347,188.604 138.537,186.43 139.415,183.943C 140.293,181.456 140.732,178.793 140.732,175.954C 140.732,173.116 140.293,170.447 139.415,167.947C 138.537,165.447 137.347,163.272 135.845,161.423C 134.343,159.574 132.576,158.109 130.546,157.029C 128.514,155.948 126.346,155.408 124.04,155.408C 121.734,155.408 119.571,155.948 117.55,157.029C 115.53,158.109 113.763,159.574 112.25,161.423C 110.738,163.272 109.548,165.447 108.68,167.947C 107.813,170.447 107.379,173.116 107.379,175.954 Z M 273.118,111.746L 272.528,110.436L 274.974,108.756L 279.976,114.154L 289.223,102.992L 291.277,105.156L 280.204,119.375L 273.118,111.746 Z M 273.101,202.505L 272.511,201.195L 274.958,199.515L 279.96,204.913L 289.206,193.751L 291.261,195.915L 280.187,210.134L 273.101,202.505 Z M 277.918,228.772L 285.391,228.772L 285.391,244.982L 290.865,244.982L 281.602,254.456L 272.444,244.877L 277.918,244.877L 277.918,228.772 Z "/>
+        </Grid>
+
+        <Grid Grid.Row="0"
               Grid.Column="0"
               Margin="12">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-
-            <Grid Grid.Row="0"
-                  VerticalAlignment="Top">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                
-                <Path Grid.Column="0" 
-                      Width="80" 
-                      Height="77" 
-                      Stretch="Fill" 
-                      Margin="8,0,24,0"
-                      Fill="{StaticResource AccentColorBrush}" 
-                      Data="M 206.946,85.6845L 307.998,85.6845L 307.998,274.314L 206.946,274.314L 206.946,85.6845 Z M 51.9978,84.0028L 200.205,57.0576L 200.205,302.95L 51.9978,276.001L 51.9978,84.0028 Z M 295.384,215.369L 295.384,188.421L 268.437,188.421L 268.437,215.369L 295.384,215.369 Z M 295.42,261.444L 295.42,256.982L 268.473,256.982L 268.473,261.444L 295.42,261.444 Z M 295.384,169.895L 295.384,142.947L 268.437,142.947L 268.437,169.895L 295.384,169.895 Z M 295.365,124.422L 295.366,97.4739L 268.419,97.4739L 268.419,124.422L 295.365,124.422 Z M 151.332,176.501L 150.173,184.06L 158.44,191.657L 152.299,204.431L 143.081,199.216L 137.86,204.431L 138.828,215.779L 127.499,219.587L 124.405,209.372L 117.296,208.181L 111.171,217.204L 100.794,209.372L 105.031,199.216L 100.794,193.083L 91.5752,194.275L 88.4813,179.118L 97.6999,175.33L 97.6999,167.536L 90.4171,159.939L 96.7323,147.4L 105.967,152.38L 110.013,147.4L 109.045,135.818L 120.39,132.009L 124.405,142.224L 130.768,143.65L 137.86,134.626L 147.095,142.224L 144.048,152.38L 147.095,158.747L 157.472,157.614L 160.55,171.521L 151.332,176.501 Z M 107.379,175.954C 107.379,178.793 107.813,181.456 108.68,183.943C 109.548,186.43 110.738,188.604 112.25,190.466C 113.763,192.328 115.53,193.793 117.55,194.861C 119.571,195.929 121.734,196.462 124.04,196.462C 126.346,196.462 128.514,195.929 130.546,194.861C 132.576,193.793 134.343,192.328 135.845,190.466C 137.347,188.604 138.537,186.43 139.415,183.943C 140.293,181.456 140.732,178.793 140.732,175.954C 140.732,173.116 140.293,170.447 139.415,167.947C 138.537,165.447 137.347,163.272 135.845,161.423C 134.343,159.574 132.576,158.109 130.546,157.029C 128.514,155.948 126.346,155.408 124.04,155.408C 121.734,155.408 119.571,155.948 117.55,157.029C 115.53,158.109 113.763,159.574 112.25,161.423C 110.738,163.272 109.548,165.447 108.68,167.947C 107.813,170.447 107.379,173.116 107.379,175.954 Z M 273.118,111.746L 272.528,110.436L 274.974,108.756L 279.976,114.154L 289.223,102.992L 291.277,105.156L 280.204,119.375L 273.118,111.746 Z M 273.101,202.505L 272.511,201.195L 274.958,199.515L 279.96,204.913L 289.206,193.751L 291.261,195.915L 280.187,210.134L 273.101,202.505 Z M 277.918,228.772L 285.391,228.772L 285.391,244.982L 290.865,244.982L 281.602,254.456L 272.444,244.877L 277.918,244.877L 277.918,228.772 Z "/>
-                
-                <TextBlock Grid.Column="1" 
-                           FontSize="24"
-                           TextWrapping="Wrap"
-                           FontWeight="SemiBold"
-                           FontFamily="Segoe UI"
-                           Text="{Binding Title}"
-                           Foreground="{StaticResource AccentColorBrush}" />
-            </Grid>
-
-            <StackPanel Grid.Row="1">
+            
+            <StackPanel Grid.Row="0">
                 <TextBlock Text="Distribution Channel" 
                            Padding="4"
                            Foreground="White" />
@@ -90,202 +85,214 @@
                            Margin="0,8,0,0" />
                 <ComboBox ItemsSource="{Binding CurrentConfiguration.AvailableEditions}" 
                           SelectedItem="{Binding CurrentConfiguration.SelectedEdition, Mode=TwoWay}" />
-                
+
                 <TextBlock Text="Version" 
                            Padding="4"
                            Foreground="White"
                            Margin="0,8,0,0" />
-                <TextBox Text="{Binding Version, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-            </StackPanel>
-        </Grid>
+                <TextBox Text="{Binding CurrentConfiguration.Version, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-        <StackPanel Grid.Row="1"
-                    Grid.Column="0" 
-                    Margin="12">
-            <CheckBox Content="Enable updates" 
-                      IsChecked="{Binding CurrentConfiguration.EnableUpdates, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                      Foreground="White"
-                      FontSize="16" />
-            <CheckBox Content="Force upgrade from Office 2013" 
-                      IsChecked="{Binding CurrentConfiguration.ForceUpgradeFromOffice2013, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                      Foreground="White"
-                      FontSize="16"
-                      Margin="0,8" />
-            <CheckBox Content="Force apps shutdown to install" 
-                      IsChecked="{Binding CurrentConfiguration.ForceAppShutdown, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                      Foreground="White"
-                      FontSize="16" />
-            <CheckBox Content="Pin icons to taskbar (if supported)" 
-                      IsChecked="{Binding CurrentConfiguration.PinIconsToTaskBar, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                      Foreground="White"
-                      FontSize="16" 
-                      Margin="0,8" />
-            <CheckBox Content="Silent mode (no UI)" 
-                      IsChecked="{Binding CurrentConfiguration.SilentMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                      Foreground="White"
-                      FontSize="16" />
-            <CheckBox Content="Accept EULA" 
-                      IsChecked="{Binding CurrentConfiguration.AcceptEula, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                      Foreground="White"
-                      FontSize="16" 
-                      Margin="0,8" />
-        </StackPanel>
-
-        <ScrollViewer Grid.Row="0"
-                      Grid.RowSpan="2"
-                      Grid.Column="1"
-                      Margin="12">
-            <StackPanel>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    
-                    <TextBlock Grid.Column="0" 
-                               Text="Languages to include"
-                               VerticalAlignment="Center"
-                               FontSize="16"
-                               Foreground="White" />
-
-                    <Button Grid.Column="1"
-                            Content="Choose languages"
-                            FontSize="13"
-                            FontWeight="SemiBold"
-                            Foreground="White"
-                            BorderBrush="DarkGray"
-                            BorderThickness="2.5"
-                            Padding="20,10"
-                            Command="{Binding ManageAddedLanguagesCommand}"
-                            Style="{StaticResource AccentedSquareButtonStyle}" />
-                </Grid>
-
-                <ListBox ItemsSource="{Binding CurrentConfiguration.AddedLanguages, Mode=OneWay}"
-                     Margin="0,12,0,0"
-                     SelectionMode="Single"
-                     Background="Transparent"
-                     Visibility="{Binding CurrentConfiguration.AddedLanguages.Count, Converter={StaticResource CountToVisibilityConverter}}">
-                    <ListBox.Resources>
-                        <Style TargetType="{x:Type ListBoxItem}">
-                            <Setter Property="Background" Value="Transparent" />
-                            <Setter Property="Margin" Value="0" />
-                        </Style>
-                    </ListBox.Resources>
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-
-                                <TextBlock Grid.Column="0"
-                                       FontSize="14"
-                                       Text="{Binding Name}" 
-                                       Foreground="White"
-                                       VerticalAlignment="Stretch" />
-                            </Grid>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-
-                <TextBlock Text="No languages added" 
-                       FontSize="14"
-                       Foreground="White"
-                       Padding="4"
-                       Visibility="{Binding CurrentConfiguration.AddedLanguages.Count, Converter={StaticResource CountToOppositeVisibilityConverter}}" />
-
-                <Grid Margin="0,24,0,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    
-                    <TextBlock Grid.Column="0" 
-                               Text="Programs to exclude"
-                               VerticalAlignment="Center"
-                               FontSize="16"
-                               Foreground="White" />
-
-                    <Button Grid.Column="1" 
-                            Content="Choose programs"
-                            FontSize="13"
-                            FontWeight="SemiBold"
-                            Foreground="White"
-                            BorderBrush="DarkGray"
-                            BorderThickness="2.5"
-                            Padding="20,10"
-                            Command="{Binding ManageExcludedProductsCommand}"
-                            Style="{StaticResource AccentedSquareButtonStyle}" />
-                </Grid>
-
-                <ListBox ItemsSource="{Binding CurrentConfiguration.ExcludedProducts, Mode=OneWay}"
-                     Margin="0,12,0,0"
-                     SelectionMode="Single"
-                     Background="Transparent"
-                     Visibility="{Binding CurrentConfiguration.ExcludedProducts.Count, Converter={StaticResource CountToVisibilityConverter}}">
-                    <ListBox.Resources>
-                        <Style TargetType="{x:Type ListBoxItem}">
-                            <Setter Property="Background" Value="Transparent" />
-                            <Setter Property="Margin" Value="0" />
-                        </Style>
-                    </ListBox.Resources>
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-
-                                <TextBlock Grid.Column="0"
-                                       FontSize="14"
-                                       Text="{Binding Name}" 
-                                       Foreground="White"
-                                       VerticalAlignment="Stretch" />
-                            </Grid>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-                <TextBlock Text="No products excluded" 
-                       FontSize="14"
-                       Foreground="White"
-                       Padding="4"
-                       Visibility="{Binding CurrentConfiguration.ExcludedProducts.Count, Converter={StaticResource CountToOppositeVisibilityConverter}}" />
-
+                <CheckBox Content="Enable updates" 
+                          IsChecked="{Binding CurrentConfiguration.EnableUpdates, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          Foreground="White"
+                          FontSize="16"
+                          Margin="0,16,0,0" />
+                <CheckBox Content="Force upgrade from Office 2013" 
+                          IsChecked="{Binding CurrentConfiguration.ForceUpgradeFromOffice2013, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          Foreground="White"
+                          FontSize="16"
+                          Margin="0,8" />
+                <CheckBox Content="Force apps shutdown to install" 
+                          IsChecked="{Binding CurrentConfiguration.ForceAppShutdown, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          Foreground="White"
+                          FontSize="16" />
+                <CheckBox Content="Pin icons to taskbar (if supported)" 
+                          IsChecked="{Binding CurrentConfiguration.PinIconsToTaskBar, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          Foreground="White"
+                          FontSize="16" 
+                          Margin="0,8" />
+                <CheckBox Content="Silent mode (no UI)" 
+                          IsChecked="{Binding CurrentConfiguration.SilentMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          Foreground="White"
+                          FontSize="16" />
+                <CheckBox Content="Accept EULA" 
+                          IsChecked="{Binding CurrentConfiguration.AcceptEula, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          Foreground="White"
+                          FontSize="16" 
+                          Margin="0,8" />
                 <CheckBox IsChecked="{Binding CurrentConfiguration.RemovePreviousOfficeInstallations, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                      Foreground="White"
-                      FontSize="16" 
-                      Margin="0,24">
+                          Foreground="White"
+                          FontSize="16" >
                     <CheckBox.Content>
                         <TextBlock Text="Remove previous all Office 365 Pro Plus products and languages installations"
-                               TextWrapping="Wrap" />
+                                   TextWrapping="Wrap" />
                     </CheckBox.Content>
                 </CheckBox>
+            </StackPanel>
 
-                <StackPanel>
-                    <CheckBox Content="Use custom download source path" 
+            <StackPanel Grid.Row="1">
+                <CheckBox Content="Use custom download source path" 
                           IsChecked="{Binding CurrentConfiguration.UseCustomDownloadPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                           Foreground="White"
                           FontSize="16" 
-                          Margin="0,0,0,8" />
-                    <TextBox Text="{Binding CurrentConfiguration.DownloadPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             Foreground="Black"
-                             IsEnabled="{Binding CurrentConfiguration.UseCustomDownloadPath}" />
-                </StackPanel>
+                          Margin="0,8" />
+                <TextBox Text="{Binding CurrentConfiguration.DownloadPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         Foreground="Black"
+                         controls:VisibilityHelper.IsVisible="{Binding CurrentConfiguration.UseCustomDownloadPath}"
+                         IsEnabled="{Binding CurrentConfiguration.UseCustomDownloadPath}" />
+            </StackPanel>
+        </Grid>
 
-                <StackPanel Margin="0,24,0,0">
-                    <CheckBox Content="Use custom installation files path" 
+        <Grid Grid.Row="0" 
+              Grid.RowSpan="2" 
+              Grid.Column="1"
+              Margin="12">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <ScrollViewer Grid.Row="0">
+                <StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" 
+                                   Text="Languages to include"
+                                   VerticalAlignment="Center"
+                                   FontSize="16"
+                                   Foreground="White" />
+
+                        <Button Grid.Column="1"
+                                Content="Choose languages"
+                                FontSize="13"
+                                FontWeight="SemiBold"
+                                Foreground="White"
+                                BorderBrush="DarkGray"
+                                BorderThickness="2.5"
+                                Padding="20,10"
+                                Command="{Binding ManageAddedLanguagesCommand}"
+                                Style="{StaticResource AccentedSquareButtonStyle}" />
+                    </Grid>
+
+                    <ListBox ItemsSource="{Binding CurrentConfiguration.AddedLanguages, Mode=OneWay}"
+                             Margin="0,12,0,0"
+                             SelectionMode="Single"
+                             Background="Transparent"
+                             Visibility="{Binding CurrentConfiguration.AddedLanguages.Count, Converter={StaticResource CountToVisibilityConverter}}">
+                        <ListBox.Resources>
+                            <Style TargetType="{x:Type ListBoxItem}">
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="Margin" Value="0" />
+                            </Style>
+                        </ListBox.Resources>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Grid.Column="0"
+                                               FontSize="16"
+                                               Text="{Binding Name}" 
+                                               Foreground="White"
+                                               VerticalAlignment="Stretch" />
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <TextBlock Text="No languages added" 
+                               FontSize="14"
+                               Foreground="White"
+                               Padding="4"
+                               Visibility="{Binding CurrentConfiguration.AddedLanguages.Count, Converter={StaticResource CountToOppositeVisibilityConverter}}" />
+
+                    <Grid Margin="0,24,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" 
+                                   Text="Programs to exclude"
+                                   VerticalAlignment="Center"
+                                   FontSize="16"
+                                   Foreground="White" />
+
+                        <Button Grid.Column="1" 
+                                Content="Choose programs"
+                                FontSize="13"
+                                FontWeight="SemiBold"
+                                Foreground="White"
+                                BorderBrush="DarkGray"
+                                BorderThickness="2.5"
+                                Padding="20,10"
+                                Command="{Binding ManageExcludedProductsCommand}"
+                                Style="{StaticResource AccentedSquareButtonStyle}" />
+                    </Grid>
+
+                    <ListBox ItemsSource="{Binding CurrentConfiguration.ExcludedProducts, Mode=OneWay}"
+                             Margin="0,12,0,0"
+                             SelectionMode="Single"
+                             Background="Transparent"
+                             Visibility="{Binding CurrentConfiguration.ExcludedProducts.Count, Converter={StaticResource CountToVisibilityConverter}}">
+                        <ListBox.Resources>
+                            <Style TargetType="{x:Type ListBoxItem}">
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="Margin" Value="0" />
+                            </Style>
+                        </ListBox.Resources>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Path Grid.Column="0"
+                                          Width="24" 
+                                          Height="24" 
+                                          Stretch="Uniform" 
+                                          Fill="{Binding PathBrush}"
+                                          Data="{Binding PathData}" />
+
+                                    <TextBlock Grid.Column="1"
+                                               FontSize="16"
+                                               Text="{Binding Name}" 
+                                               Foreground="White"
+                                               VerticalAlignment="Center"
+                                               Margin="8,0" />
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <TextBlock Text="No products excluded" 
+                               FontSize="14"
+                               Foreground="White"
+                               Padding="4"
+                               Visibility="{Binding CurrentConfiguration.ExcludedProducts.Count, Converter={StaticResource CountToOppositeVisibilityConverter}}" />
+                </StackPanel>
+            </ScrollViewer>
+
+            <StackPanel Grid.Row="1">
+                <CheckBox Content="Use custom installation files path" 
                           IsChecked="{Binding CurrentConfiguration.UseCustomSourcePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                           Foreground="White"
                           FontSize="16" 
                           Margin="0,0,0,8" />
-                    <TextBox Text="{Binding CurrentConfiguration.SourcePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             Foreground="Black"
-                             IsEnabled="{Binding CurrentConfiguration.UseCustomSourcePath}" />
-                </StackPanel>
+                <TextBox Text="{Binding CurrentConfiguration.SourcePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         Foreground="Black"
+                         controls:VisibilityHelper.IsVisible="{Binding CurrentConfiguration.UseCustomSourcePath}"
+                         IsEnabled="{Binding CurrentConfiguration.UseCustomSourcePath}" />
             </StackPanel>
-        </ScrollViewer>
+        </Grid>
+        
 
         <Grid Grid.Row="2" 
               Grid.ColumnSpan="2">
@@ -298,23 +305,27 @@
                         Orientation="Horizontal"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Center">
-                <Button Content="Load"
+                <Button Content="&#xE160;"
+                        ToolTipService.ToolTip="Load"
+                        FontFamily="Segoe UI Symbol"
+                        FontWeight="Light"
                         FontSize="16"
-                        FontWeight="SemiBold"
                         Foreground="White"
                         BorderBrush="DarkGray"
                         BorderThickness="2.5"
-                        Padding="20,10"
+                        Padding="10"
                         Margin="16"
                         Command="{Binding LoadCommand}"
                         Style="{StaticResource AccentedSquareButtonStyle}" />
-                <Button Content="Save"
+                <Button Content="&#xE105;"
+                        ToolTipService.ToolTip="Save"
+                        FontFamily="Segoe UI Symbol"
+                        FontWeight="Light"
                         FontSize="16"
-                        FontWeight="SemiBold"
                         Foreground="White"
                         BorderBrush="DarkGray"
                         BorderThickness="2.5"
-                        Padding="20,10"
+                        Padding="10"
                         Margin="0,16,16,16" 
                         Command="{Binding SaveCommand}"
                         Style="{StaticResource AccentedSquareButtonStyle}" />
@@ -339,23 +350,27 @@
                         Orientation="Horizontal"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Center">
-                <Button Content="Download"
+                <Button Content="&#xE118;"
+                        ToolTipService.ToolTip="Download"
+                        FontFamily="Segoe UI Symbol"
+                        FontWeight="Light"
                         FontSize="16"
-                        FontWeight="SemiBold"
                         Foreground="White"
                         BorderBrush="DarkGray"
                         BorderThickness="2.5"
-                        Padding="20,10"
+                        Padding="10"
                         Margin="16"
                         Command="{Binding DownloadCommand}"
                         Style="{StaticResource AccentedSquareButtonStyle}" />
-                <Button Content="Install"
+                <Button Content="&#xE193;"
+                        ToolTipService.ToolTip="Install"
+                        FontFamily="Segoe UI Symbol"
+                        FontWeight="Light"
                         FontSize="16"
-                        FontWeight="SemiBold"
                         Foreground="White"
                         BorderBrush="DarkGray"
                         BorderThickness="2.5"
-                        Padding="20,10"
+                        Padding="10"
                         Margin="0,16,16,16"
                         Command="{Binding InstallCommand}"
                         Style="{StaticResource AccentedSquareButtonStyle}" />

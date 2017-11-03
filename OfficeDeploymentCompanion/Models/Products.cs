@@ -33,7 +33,11 @@ namespace OfficeDeploymentCompanion.Models
         public class Product
         {
             public string Name { get; set; }
-            
+
+            public string Path { get; set; }
+
+            public string Color { get; set; }
+
             public string Id { get; set; }
         }
     }

@@ -56,16 +56,23 @@
                     <DataTemplate>
                         <Grid>
                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Grid.Column="0"
+                            <Path Width="16" 
+                                  Height="16" 
+                                  Stretch="Uniform" 
+                                  Fill="{Binding PathBrush}"
+                                  Data="{Binding PathData}" />
+                            <TextBlock Grid.Column="1"
                                        FontSize="14"
                                        Text="{Binding Name}" 
                                        Foreground="White"
-                                       VerticalAlignment="Stretch" />
-                            <Button Grid.Column="1" 
+                                       VerticalAlignment="Center"
+                                       Margin="8,0" />
+                            <Button Grid.Column="2" 
                                     Content="✖"
                                     FontFamily="Segoe UI Symbol"
                                     FontWeight="SemiBold"
