@@ -169,7 +169,6 @@
                                 Content="Choose languages"
                                 FontSize="13"
                                 FontWeight="SemiBold"
-                                Foreground="White"
                                 BorderBrush="DarkGray"
                                 BorderThickness="2.5"
                                 Padding="20,10"
@@ -179,18 +178,18 @@
 
                     <ListBox ItemsSource="{Binding CurrentConfiguration.AddedLanguages, Mode=OneWay}"
                              Margin="0,12,0,0"
-                             SelectionMode="Single"
                              Background="Transparent"
                              Visibility="{Binding CurrentConfiguration.AddedLanguages.Count, Converter={StaticResource CountToVisibilityConverter}}">
-                        <ListBox.Resources>
+                        <ListBox.ItemContainerStyle>
                             <Style TargetType="{x:Type ListBoxItem}">
+                                <Setter Property="Focusable" Value="False"/>
                                 <Setter Property="Background" Value="Transparent" />
                                 <Setter Property="Margin" Value="0" />
                             </Style>
-                        </ListBox.Resources>
+                        </ListBox.ItemContainerStyle>
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <Grid>
+                                <Grid Margin="4">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="Auto" />
@@ -228,7 +227,6 @@
                                 Content="Choose programs"
                                 FontSize="13"
                                 FontWeight="SemiBold"
-                                Foreground="White"
                                 BorderBrush="DarkGray"
                                 BorderThickness="2.5"
                                 Padding="20,10"
@@ -241,15 +239,16 @@
                              SelectionMode="Single"
                              Background="Transparent"
                              Visibility="{Binding CurrentConfiguration.ExcludedProducts.Count, Converter={StaticResource CountToVisibilityConverter}}">
-                        <ListBox.Resources>
+                        <ListBox.ItemContainerStyle>
                             <Style TargetType="{x:Type ListBoxItem}">
+                                <Setter Property="Focusable" Value="False"/>
                                 <Setter Property="Background" Value="Transparent" />
                                 <Setter Property="Margin" Value="0" />
                             </Style>
-                        </ListBox.Resources>
+                        </ListBox.ItemContainerStyle>
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <Grid>
+                                <Grid Margin="4">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="*" />
@@ -310,7 +309,6 @@
                         FontFamily="Segoe UI Symbol"
                         FontWeight="Light"
                         FontSize="16"
-                        Foreground="White"
                         BorderBrush="DarkGray"
                         BorderThickness="2.5"
                         Padding="10"
@@ -322,7 +320,6 @@
                         FontFamily="Segoe UI Symbol"
                         FontWeight="Light"
                         FontSize="16"
-                        Foreground="White"
                         BorderBrush="DarkGray"
                         BorderThickness="2.5"
                         Padding="10"
@@ -355,7 +352,6 @@
                         FontFamily="Segoe UI Symbol"
                         FontWeight="Light"
                         FontSize="16"
-                        Foreground="White"
                         BorderBrush="DarkGray"
                         BorderThickness="2.5"
                         Padding="10"
@@ -367,7 +363,6 @@
                         FontFamily="Segoe UI Symbol"
                         FontWeight="Light"
                         FontSize="16"
-                        Foreground="White"
                         BorderBrush="DarkGray"
                         BorderThickness="2.5"
                         Padding="10"

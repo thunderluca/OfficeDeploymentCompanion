@@ -6,6 +6,7 @@
                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                       mc:Ignorable="d"
                       Title="Office programs to exclude"
+                      TitleCaps="False"
                       ShowIconOnTitleBar="False"
                       BorderBrush="{StaticResource AccentColorBrush}"
                       Background="{StaticResource DarkGrayVS}"
@@ -15,6 +16,14 @@
                       ResizeMode="NoResize"
                       Width="300"
                       Height="400">
+    <controls:MetroWindow.TitleTemplate>
+        <DataTemplate>
+            <TextBlock FontFamily="Segoe UI" 
+                       Text="{Binding}"
+                       VerticalAlignment="Center"
+                       Margin="16,0" />
+        </DataTemplate>
+    </controls:MetroWindow.TitleTemplate>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -102,7 +111,6 @@
             <Button Grid.Column="0" 
                     Content="Cancel"
                     FontWeight="SemiBold"
-                    Foreground="White"
                     BorderBrush="DarkGray"
                     BorderThickness="2.5"
                     Margin="12"
@@ -112,7 +120,6 @@
             <Button Grid.Column="1" 
                     Content="Confirm"
                     FontWeight="SemiBold"
-                    Foreground="White"
                     BorderBrush="DarkGray"
                     BorderThickness="2.5"
                     Margin="12"
