@@ -80,6 +80,7 @@
     </ApplicationDefinition>
     <Compile Include="Converters\CountToOppositeVisibilityConverter.cs" />
     <Compile Include="Converters\CountToVisibilityConverter.cs" />
+    <Compile Include="Helpers\ColorHelper.cs" />
     <Compile Include="Helpers\EnumHelper.cs" />
     <Compile Include="Helpers\ValuesHelper.cs" />
     <Compile Include="Helpers\XmlWriterHelper.cs" />
