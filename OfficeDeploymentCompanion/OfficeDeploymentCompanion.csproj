@@ -164,12 +164,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
-  <ItemGroup>
-    <Resource Include="Assets\OfficeDeploymentCompanion.white.ico" />
-  </ItemGroup>
   <ItemGroup>
     <Resource Include="OfficeDeploymentCompanion.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\OfficeDeploymentCompanion.white.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
